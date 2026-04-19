@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1776147630472,
+    "name": "Rugved Zambare",
+    "email": "rugved.zambare23@pccoepune.org",
+    "destination": "Tokyo",
+    "mode": "flight",
+    "passengers": 1,
+    "totalPrice": 1800,
+    "date": "2026-04-14T06:20:30.472Z"
+  },
+  {
+    "id": 1776169034816,
+    "name": "Aditya singh",
+    "email": "spinythyme05@gmail.com",
+    "destination": "Goa",
+    "mode": "flight",
+    "passengers": 4,
+    "totalPrice": 1600,
+    "date": "2026-04-14T12:17:14.816Z"
+  }
+]

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkyWay Travels</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <nav>
+    <div class="logo">SkyWay Travels</div>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="#destinations">Destinations</a></li>
+      <li><a href="/bookings">My Bookings</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <div class="stars" id="stars"></div>
+    <h1>Explore the <span>World</span> With Us</h1>
+    <p>Book flights, buses, and trains to amazing destinations. Watch your journey come alive!</p>
+    <a href="#destinations" class="hero-btn">View Destinations</a>
+
+    <div class="scene">
+      <div class="cloud cloud-1"></div>
+      <div class="cloud cloud-2"></div>
+      <div class="cloud cloud-3"></div>
+      <div class="airplane">&#9992;</div>
+    </div>
+  </section>
+
+  <h2 class="section-title" id="destinations">Popular <span>Destinations</span></h2>
+  <div class="destinations-grid" id="destGrid"></div>
+
+  <footer>&copy; 2026 SkyWay Travels | Node.js + Express + NoSQL</footer>
+
+  <script>
+    // Generate stars
+    const starsEl = document.getElementById("stars");
+    for (let i = 0; i < 40; i++) {
+      const s = document.createElement("div");
+      s.className = "star";
+      s.style.left = Math.random() * 100 + "%";
+      s.style.top = Math.random() * 100 + "%";
+      s.style.animationDelay = Math.random() * 3 + "s";
+      starsEl.appendChild(s);
+    }
+
+    // Fetch destinations from API and render cards
+    fetch("/api/destinations")
+      .then((r) => r.json())
+      .then((destinations) => {
+        const grid = document.getElementById("destGrid");
+        destinations.forEach((d) => {
+          const modeIcons = { flight: "&#9992; Flight", bus: "&#128652; Bus", train: "&#128646; Train" };
+          const badges = d.modes.map((m) => `<span class="mode-badge">${modeIcons[m]}</span>`).join("");
+          grid.innerHTML += `
+            <a href="/destination?id=${d.id}" class="dest-card">
+              <img src="${d.image}" alt="${d.name}" loading="lazy" />
+              <div class="card-body">
+                <h3>${d.name}</h3>
+                <p class="country">${d.country}</p>
+                <p class="price">$${d.price} <small>/person</small></p>
+                <div class="modes-badges">${badges}</div>
+              </div>
+            </a>`;
+        });
+      });
+  </script>
+</body>
+</html>

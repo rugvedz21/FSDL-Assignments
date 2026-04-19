@@ -1,0 +1,60 @@
+<%- include('partials/header') %>
+
+<section class="detail">
+  <div class="detail-img" style="background-image:url('<%= car.image %>')"></div>
+  <div class="detail-info">
+    <h1><%= car.brand %> <%= car.model %></h1>
+    <p class="price big">₹<%= car.price.toLocaleString('en-IN') %></p>
+    <div class="specs">
+      <div class="spec"><span>Year</span><b><%= car.year %></b></div>
+      <div class="spec"><span>KM Driven</span><b><%= car.kmDriven.toLocaleString() %></b></div>
+      <div class="spec"><span>Fuel</span><b><%= car.fuel %></b></div>
+      <div class="spec"><span>Trans.</span><b><%= car.transmission %></b></div>
+      <div class="spec"><span>Color</span><b><%= car.color %></b></div>
+      <div class="spec"><span>Owner</span><b><%= car.owner %></b></div>
+      <div class="spec"><span>Location</span><b><%= car.location %></b></div>
+    </div>
+    <p class="desc"><%= car.description %></p>
+
+    <div class="actions">
+      <form action="/cart/add/<%= car._id %>" method="POST" style="display:inline">
+        <button class="btn btn-secondary">🛒 Add to Cart</button>
+      </form>
+      <a href="#book" class="btn btn-primary">📅 Book Test Drive</a>
+      <a href="/cars/<%= car._id %>/edit" class="btn btn-ghost">✏️ Edit</a>
+      <form action="/cars/<%= car._id %>?_method=DELETE" method="POST" style="display:inline" onsubmit="return confirm('Delete this car?')">
+        <button class="btn btn-danger">🗑️ Delete</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section id="book" class="section">
+  <h2 class="section-title">📅 Book a Test Drive / Inquiry</h2>
+  <form action="/cars/<%= car._id %>/book" method="POST" class="form-card">
+    <input name="buyerName" placeholder="Your Name" required>
+    <input name="buyerEmail" type="email" placeholder="Email" required>
+    <input name="buyerPhone" placeholder="Phone" required>
+    <textarea name="message" placeholder="Any special requests..." rows="3"></textarea>
+    <button class="btn btn-primary" type="submit">Confirm Booking</button>
+  </form>
+</section>
+
+<% if (similar.length) { %>
+<section class="section">
+  <h2 class="section-title">Similar <%= car.brand %> Cars</h2>
+  <div class="grid">
+    <% similar.forEach(c => { %>
+      <a href="/cars/<%= c._id %>" class="card">
+        <div class="card-img" style="background-image:url('<%= c.image %>')"></div>
+        <div class="card-body">
+          <h3><%= c.brand %> <%= c.model %></h3>
+          <p class="price">₹<%= c.price.toLocaleString('en-IN') %></p>
+        </div>
+      </a>
+    <% }) %>
+  </div>
+</section>
+<% } %>
+
+<%- include('partials/footer') %>

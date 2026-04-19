@@ -1,0 +1,31 @@
+<%- include('partials/header') %>
+<section class="section">
+  <h1 class="section-title">🛒 Your Garage Cart</h1>
+  <% if (!cars.length) { %>
+    <div class="empty">Your cart is empty. <a href="/">Browse cars →</a></div>
+  <% } else { %>
+    <div class="cart-list">
+      <% cars.forEach(car => { %>
+        <div class="cart-item">
+          <div class="cart-img" style="background-image:url('<%= car.image %>')"></div>
+          <div class="cart-info">
+            <h3><%= car.brand %> <%= car.model %></h3>
+            <p class="meta"><%= car.year %> · <%= car.fuel %> · <%= car.location %></p>
+            <p class="price">₹<%= car.price.toLocaleString('en-IN') %></p>
+          </div>
+          <form action="/cart/remove/<%= car._id %>" method="POST">
+            <button class="btn btn-danger">Remove</button>
+          </form>
+        </div>
+      <% }) %>
+    </div>
+    <div class="cart-total">
+      <h2>Total: ₹<%= total.toLocaleString('en-IN') %></h2>
+      <form action="/cart/clear" method="POST" style="display:inline">
+        <button class="btn btn-ghost">Clear Cart</button>
+      </form>
+      <button class="btn btn-primary" onclick="alert('🎉 Checkout flow coming soon!')">Checkout</button>
+    </div>
+  <% } %>
+</section>
+<%- include('partials/footer') %>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sell Your Car — CarBazaar</title>
+<link rel="stylesheet" href="/css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Racing+Sans+One&display=swap" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar">
+  <a href="/" class="logo">🏎️ <span>Car</span>Bazaar</a>
+  <div class="nav-links">
+    <a href="/">Browse</a>
+    <a href="/new.html">Sell Your Car</a>
+    <a href="/bookings.html">Bookings</a>
+    <a href="/cart.html" class="cart-link">🛒 Cart <span class="badge" id="cartCount">0</span></a>
+  </div>
+</nav>
+
+<section class="section">
+  <h1 class="section-title">🚙 Sell Your Car</h1>
+  <form id="newForm" class="form-card big-form">
+    <div class="row">
+      <input name="brand" placeholder="Brand (e.g. Toyota)" required>
+      <input name="model" placeholder="Model (e.g. Fortuner)" required>
+    </div>
+    <div class="row">
+      <input name="year" type="number" placeholder="Year" required>
+      <input name="price" type="number" placeholder="Price (₹)" required>
+    </div>
+    <div class="row">
+      <input name="kmDriven" type="number" placeholder="KM Driven">
+      <input name="color" placeholder="Color">
+    </div>
+    <div class="row">
+      <select name="fuel"><option>Petrol</option><option>Diesel</option><option>Electric</option><option>Hybrid</option><option>CNG</option></select>
+      <select name="transmission"><option>Manual</option><option>Automatic</option></select>
+    </div>
+    <input name="location" placeholder="Location">
+    <input name="image" placeholder="Image URL">
+    <textarea name="description" placeholder="Describe your car..." rows="4"></textarea>
+    <button class="btn btn-primary" type="submit">List Car</button>
+  </form>
+</section>
+
+<footer><p>© 2026 CarBazaar</p></footer>
+
+<script src="/js/app.js"></script>
+<script>
+document.getElementById('newForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const data = Object.fromEntries(new FormData(e.target));
+  const res = await fetch('/api/cars', {
+    method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data)
+  });
+  const car = await res.json();
+  location.href = '/car.html?id=' + car._id;
+});
+</script>
+</body>
+</html>

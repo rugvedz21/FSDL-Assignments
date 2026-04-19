@@ -1,0 +1,23 @@
+<%- include('partials/header') %>
+<section class="section">
+  <h1 class="section-title">✏️ Edit Listing</h1>
+  <form action="/cars/<%= car._id %>?_method=PUT" method="POST" class="form-card big-form">
+    <div class="row">
+      <input name="brand" value="<%= car.brand %>" required>
+      <input name="model" value="<%= car.model %>" required>
+    </div>
+    <div class="row">
+      <input name="year" type="number" value="<%= car.year %>" required>
+      <input name="price" type="number" value="<%= car.price %>" required>
+    </div>
+    <div class="row">
+      <input name="kmDriven" type="number" value="<%= car.kmDriven %>">
+      <input name="color" value="<%= car.color %>">
+    </div>
+    <input name="location" value="<%= car.location %>">
+    <input name="image" value="<%= car.image %>">
+    <textarea name="description" rows="4"><%= car.description %></textarea>
+    <button class="btn btn-primary" type="submit">Update</button>
+  </form>
+</section>
+<%- include('partials/footer') %>

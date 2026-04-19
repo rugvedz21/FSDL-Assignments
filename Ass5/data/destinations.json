@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "name": "Paris",
+    "country": "France",
+    "image": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&q=80",
+    "price": 1200,
+    "description": "The City of Light awaits with iconic landmarks, world-class cuisine, and romantic ambiance.",
+    "modes": ["flight", "bus", "train"]
+  },
+  {
+    "id": 2,
+    "name": "Tokyo",
+    "country": "Japan",
+    "image": "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&q=80",
+    "price": 1800,
+    "description": "Experience the perfect blend of ancient temples and futuristic technology.",
+    "modes": ["flight"]
+  },
+  {
+    "id": 3,
+    "name": "New York",
+    "country": "USA",
+    "image": "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=600&q=80",
+    "price": 900,
+    "description": "The city that never sleeps - Broadway, Central Park, and endless energy.",
+    "modes": ["flight", "bus", "train"]
+  },
+  {
+    "id": 4,
+    "name": "Dubai",
+    "country": "UAE",
+    "image": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600&q=80",
+    "price": 1500,
+    "description": "Luxury shopping, ultramodern architecture, and a vibrant nightlife scene.",
+    "modes": ["flight", "bus"]
+  },
+  {
+    "id": 5,
+    "name": "Goa",
+    "country": "India",
+    "image": "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=600&q=80",
+    "price": 400,
+    "description": "Beautiful beaches, vibrant nightlife, and Portuguese heritage architecture.",
+    "modes": ["flight", "bus", "train"]
+  },
+  {
+    "id": 6,
+    "name": "London",
+    "country": "UK",
+    "image": "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=600&q=80",
+    "price": 1100,
+    "description": "Historic landmarks, world-class museums, and British charm.",
+    "modes": ["flight", "train"]
+  }
+]

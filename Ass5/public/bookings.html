@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkyWay Travels - My Bookings</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <nav>
+    <div class="logo">SkyWay Travels</div>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/#destinations">Destinations</a></li>
+      <li><a href="/bookings">My Bookings</a></li>
+    </ul>
+  </nav>
+
+  <div class="bookings-page">
+    <h1>My Bookings</h1>
+    <div id="bookingsList"></div>
+  </div>
+
+  <footer>&copy; 2026 SkyWay Travels | Node.js + Express + NoSQL</footer>
+
+  <script>
+    fetch("/api/bookings")
+      .then((r) => r.json())
+      .then((bookings) => {
+        const container = document.getElementById("bookingsList");
+
+        if (bookings.length === 0) {
+          container.innerHTML = `
+            <div class="empty-state">
+              <div class="icon">&#128218;</div>
+              <h3>No bookings yet</h3>
+              <p style="margin-top:10px;"><a href="/" style="color:#00d4ff;">Browse destinations</a> and book your first trip!</p>
+            </div>`;
+          return;
+        }
+
+        const icons = { flight: "&#9992;", bus: "&#128652;", train: "&#128646;" };
+        bookings.reverse().forEach((b) => {
+          container.innerHTML += `
+            <div class="booking-card">
+              <div class="booking-info">
+                <h3>${icons[b.mode] || ""} ${b.destination}</h3>
+                <p>${b.name} &bull; ${b.email} &bull; ${b.passengers} passenger(s) &bull; ${b.mode}</p>
+                <p style="font-size:0.8rem;color:#555;">${new Date(b.date).toLocaleString()}</p>
+              </div>
+              <div class="booking-price">$${b.totalPrice}</div>
+            </div>`;
+        });
+      });
+  </script>
+</body>
+</html>

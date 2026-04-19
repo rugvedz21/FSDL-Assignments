@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkyWay Travels - Destination</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <nav>
+    <div class="logo">SkyWay Travels</div>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/#destinations">Destinations</a></li>
+      <li><a href="/bookings">My Bookings</a></li>
+    </ul>
+  </nav>
+
+  <div class="detail-hero" id="heroSection">
+    <div class="info">
+      <h1 id="destName"></h1>
+      <p class="country-tag" id="destCountry"></p>
+    </div>
+  </div>
+
+  <div class="detail-content">
+    <p class="desc" id="destDesc"></p>
+
+    <h3 style="margin-bottom:16px;">Choose Your Travel Mode</h3>
+    <div class="mode-selector" id="modeSelector"></div>
+
+    <!-- Animation Container -->
+    <div class="animation-container" id="animBox"></div>
+
+    <!-- Booking Form -->
+    <div class="booking-form">
+      <h3>Book Your Trip to <span id="formDestName"></span></h3>
+      <form id="bookingForm">
+        <input type="hidden" name="destination" id="destId" />
+        <input type="hidden" name="mode" id="modeInput" />
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" name="name" required placeholder="John Doe" />
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email" required placeholder="john@example.com" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Passengers</label>
+            <input type="number" name="passengers" id="passInput" min="1" max="10" value="1" required />
+          </div>
+          <div class="form-group">
+            <label>Price per person</label>
+            <input type="text" id="priceDisplay" disabled />
+          </div>
+        </div>
+        <button type="submit" class="submit-btn">Book Now - $<span id="totalPrice"></span></button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div class="modal-overlay" id="successModal">
+    <div class="modal">
+      <div class="check-icon">&#10004;&#65039;</div>
+      <h2>Booking Confirmed!</h2>
+      <p id="modalMsg"></p>
+      <a href="/bookings" class="modal-btn">View My Bookings</a>
+    </div>
+  </div>
+
+  <footer>&copy; 2026 SkyWay Travels | Node.js + Express + NoSQL</footer>
+
+  <script>
+    let destPrice = 0;
+
+    // Animation HTML for each travel mode
+    const animations = {
+      flight: `
+        <div class="anim-flight">
+          <div class="sky">
+            <div class="cloud-a" style="top:30px;">&#9729;</div>
+            <div class="cloud-a" style="top:20px;">&#9729;</div>
+            <div class="cloud-a" style="top:100px;">&#9729;</div>
+          </div>
+          <div class="contrail"></div>
+          <div class="plane">&#9992;</div>
+          ${Array.from({length:8}, () =>
+            `<div style="position:absolute;left:${Math.random()*100}%;top:${Math.random()*60}%;animation-delay:${Math.random()*3}s;width:2px;height:2px;background:#fff;border-radius:50%;animation:twinkle 3s ease-in-out infinite;"></div>`
+          ).join("")}
+        </div>`,
+      bus: `
+        <div class="anim-bus">
+          <div class="mountain"></div>
+          <div class="mountain"></div>
+          <div class="tree">&#127794;</div>
+          <div class="tree">&#127795;</div>
+          <div class="tree">&#127794;</div>
+          <div class="bus">&#128652;</div>
+          <div class="road">
+            <div class="road-line"></div><div class="road-line"></div>
+            <div class="road-line"></div><div class="road-line"></div>
+            <div class="road-line"></div><div class="road-line"></div>
+            <div class="road-line"></div>
+          </div>
+        </div>`,
+      train: `
+        <div class="anim-train">
+          <div class="pole"></div>
+          <div class="pole"></div>
+          <div class="train">&#128646;</div>
+          <div class="track">
+            <div class="sleeper"></div><div class="sleeper"></div>
+            <div class="sleeper"></div><div class="sleeper"></div>
+            <div class="sleeper"></div><div class="sleeper"></div>
+            <div class="sleeper"></div><div class="sleeper"></div>
+            <div class="sleeper"></div><div class="sleeper"></div>
+            <div class="sleeper"></div><div class="sleeper"></div>
+            <div class="sleeper"></div>
+          </div>
+        </div>`
+    };
+
+    function selectMode(mode) {
+      document.querySelectorAll(".mode-option").forEach((e) => e.classList.remove("active"));
+      document.querySelector(`[data-mode="${mode}"]`).classList.add("active");
+      document.getElementById("modeInput").value = mode;
+      document.getElementById("animBox").innerHTML = animations[mode] || "";
+    }
+
+    // Get destination ID from URL
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    fetch("/api/destinations/" + id)
+      .then((r) => r.json())
+      .then((d) => {
+        destPrice = d.price;
+        document.getElementById("heroSection").style.backgroundImage = `url('${d.image}')`;
+        document.getElementById("destName").textContent = d.name;
+        document.getElementById("destCountry").textContent = d.country;
+        document.getElementById("destDesc").textContent = d.description;
+        document.getElementById("formDestName").textContent = d.name;
+        document.getElementById("destId").value = d.id;
+        document.getElementById("priceDisplay").value = "$" + d.price;
+        document.getElementById("totalPrice").textContent = d.price;
+        document.title = "SkyWay Travels - " + d.name;
+
+        const icons = { flight: "&#9992;", bus: "&#128652;", train: "&#128646;" };
+        const selector = document.getElementById("modeSelector");
+        d.modes.forEach((m, i) => {
+          selector.innerHTML += `
+            <div class="mode-option ${i === 0 ? "active" : ""}" data-mode="${m}" onclick="selectMode('${m}')">
+              <div class="mode-icon">${icons[m]}</div>
+              <div class="mode-name">${m.charAt(0).toUpperCase() + m.slice(1)}</div>
+            </div>`;
+        });
+
+        document.getElementById("modeInput").value = d.modes[0];
+        document.getElementById("animBox").innerHTML = animations[d.modes[0]];
+      });
+
+    // Update total price when passengers change
+    document.getElementById("passInput").addEventListener("input", function () {
+      document.getElementById("totalPrice").textContent = destPrice * (parseInt(this.value) || 1);
+    });
+
+    // Submit booking
+    document.getElementById("bookingForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const fd = new FormData(this);
+      const data = Object.fromEntries(fd);
+
+      fetch("/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      })
+        .then((r) => r.json())
+        .then((result) => {
+          if (result.success) {
+            const b = result.booking;
+            document.getElementById("modalMsg").textContent =
+              b.name + ", your " + b.mode + " to " + b.destination + " for " + b.passengers + " passenger(s) is confirmed! Total: $" + b.totalPrice;
+            document.getElementById("successModal").classList.add("active");
+          }
+        });
+    });
+
+    // Close modal on overlay click
+    document.getElementById("successModal").addEventListener("click", function (e) {
+      if (e.target === this) this.classList.remove("active");
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CarBazaar — Premium Used Cars</title>
+<link rel="stylesheet" href="/css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Racing+Sans+One&display=swap" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar">
+  <a href="/" class="logo">🏎️ <span>Car</span>Bazaar</a>
+  <div class="nav-links">
+    <a href="/">Browse</a>
+    <a href="/new.html">Sell Your Car</a>
+    <a href="/bookings.html">Bookings</a>
+    <a href="/cart.html" class="cart-link">🛒 Cart <span class="badge" id="cartCount">0</span></a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-content">
+    <h1 class="hero-title">Find Your <span class="gradient">Dream Ride</span></h1>
+    <p class="hero-sub">India's premium marketplace for certified pre-owned cars 🚀</p>
+    <form id="searchForm" class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search by brand or model...">
+      <button type="submit">🔍 Search</button>
+    </form>
+  </div>
+  <div class="hero-blob"></div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">⭐ Featured Deals</h2>
+  <div class="grid" id="featuredGrid"></div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <h2 class="section-title">🚗 All Cars (<span id="carCount">0</span>)</h2>
+    <div class="filters">
+      <select id="filterBrand"><option value="">All Brands</option></select>
+      <select id="filterFuel">
+        <option value="">All Fuels</option>
+        <option>Petrol</option><option>Diesel</option><option>Electric</option><option>Hybrid</option><option>CNG</option>
+      </select>
+      <select id="filterSort">
+        <option value="">Sort: Latest</option>
+        <option value="low">Price: Low → High</option>
+        <option value="high">Price: High → Low</option>
+        <option value="new">Year: Newest</option>
+      </select>
+    </div>
+  </div>
+  <div class="grid" id="carGrid"></div>
+  <div class="empty" id="emptyState" style="display:none">😔 No cars found. <a href="/new.html">Be the first to list one!</a></div>
+</section>
+
+<footer><p>© 2026 CarBazaar — Drive your dream. Built with Node.js + Express + MongoDB.</p></footer>
+
+<script src="/js/app.js"></script>
+<script src="/js/home.js"></script>
+</body>
+</html>

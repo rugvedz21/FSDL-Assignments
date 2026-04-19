@@ -1,0 +1,23 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "CarBazaar (npm start)",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["start"],
+      "port": 3000
+    },
+    {
+      "name": "CarBazaar (nodemon dev)",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3000
+    },
+    {
+      "name": "Seed MongoDB",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "seed"],
+      "port": 0
+    }
+  ]
+}

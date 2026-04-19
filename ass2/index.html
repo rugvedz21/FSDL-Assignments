@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vibeflow</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="amazing.css">
+</head>
+<body>
+<div class="cursor-glow" id="cursor-glow"></div>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-noise"></div>
+    <div class="logo">
+      <div class="logo-mark">
+        <i class="fa-solid fa-waveform-lines"></i>
+        <div class="logo-pulse"></div>
+      </div>
+      <div>
+        <div class="logo-text">Vibeflow</div>
+        <div class="logo-badge">RAP · HIP-HOP</div>
+      </div>
+    </div>
+    <div class="nav" id="nav">
+      <div class="nav-item active" data-page="home"><i class="fa-solid fa-house"></i><span> Home</span></div>
+      <div class="nav-item" data-page="search"><i class="fa-solid fa-magnifying-glass"></i><span> Search</span></div>
+      <div class="nav-item" data-page="local"><i class="fa-solid fa-folder-open"></i><span> Local Files</span></div>
+    </div>
+    <div class="lib-label"><span>Your Library</span></div>
+    <div class="playlists" id="playlists"></div>
+    <div class="sidebar-user">
+      <div class="user-av"><i class="fa-solid fa-user"></i></div>
+      <div><div class="user-n">You</div><div class="user-p">Pro</div></div>
+      <div class="user-pulse"></div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main" id="main-scroll">
+    <div class="topbar" id="topbar">
+      <div class="nav-arrows">
+        <button class="arr-btn"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="arr-btn"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input id="search-input" type="text" placeholder="Artists, songs, albums...">
+      </div>
+      <div class="topbar-right">
+        <button class="icon-btn" id="queue-btn" title="Queue"><i class="fa-solid fa-list-ul"></i></button>
+      </div>
+    </div>
+
+    <!-- HOME PAGE -->
+    <div class="page active" id="home-page">
+      <div class="hero">
+        <div class="hero-bg-orbs">
+          <div class="orb orb1"></div>
+          <div class="orb orb2"></div>
+          <div class="orb orb3"></div>
+        </div>
+        <div class="hero-grid">
+          <div class="hero-content">
+            <div class="hero-eyebrow reveal-fade"><span class="eyebrow-dot"></span>Now Streaming Rap</div>
+            <h1 class="reveal-slide">The Sound<br><span class="line2">Hits Different.</span></h1>
+            <p class="reveal-fade" style="transition-delay:.15s">Every bar, every beat, every drop — curated for the culture. No filler, just fire.</p>
+            <div class="hero-actions reveal-fade" style="transition-delay:.25s">
+              <button class="btn-glow" id="play-all-btn"><i class="fa-solid fa-play"></i> Play All</button>
+              <button class="btn-outline" id="shuffle-hero-btn"><i class="fa-solid fa-shuffle"></i> Shuffle</button>
+            </div>
+          </div>
+          <div class="hero-visual reveal-fade" style="transition-delay:.1s">
+            <div class="viz-ring">
+              <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+              <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+              <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+            </div>
+            <div class="viz-disc">
+              <div class="disc-inner"><i class="fa-solid fa-waveform-lines"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="featured" id="featured-el">
+        <div class="feat-art" id="feat-art"></div>
+        <div class="feat-body">
+          <div class="feat-badge"><i class="fa-solid fa-star"></i> Album of the Month</div>
+          <div class="feat-title" id="feat-title"></div>
+          <div class="feat-sub" id="feat-sub"></div>
+          <div class="feat-tags" id="feat-tags"></div>
+          <button class="feat-play-btn" id="feat-play-btn"><i class="fa-solid fa-play"></i> Play Now</button>
+        </div>
+      </div>
+
+      <div class="section reveal-section">
+        <div class="sec-head">
+          <div class="sec-title">Trending Now</div>
+          <div class="sec-link">See all <i class="fa-solid fa-arrow-right"></i></div>
+        </div>
+        <div class="grid" id="trending-grid"></div>
+      </div>
+
+      <div class="section reveal-section" style="margin-top:48px">
+        <div class="sec-head">
+          <div class="sec-title">Classic Albums</div>
+          <div class="sec-link">See all <i class="fa-solid fa-arrow-right"></i></div>
+        </div>
+        <div class="grid" id="albums-grid"></div>
+      </div>
+
+      <div class="section reveal-section" style="margin-top:48px;padding-bottom:48px">
+        <div class="sec-head">
+          <div class="sec-title">Top Artists</div>
+          <div class="sec-link">See all <i class="fa-solid fa-arrow-right"></i></div>
+        </div>
+        <div class="grid" id="artists-grid"></div>
+      </div>
+    </div>
+
+    <!-- SEARCH PAGE -->
+    <div class="page" id="search-page">
+      <div class="search-page-wrap">
+        <div class="search-lbl" id="search-lbl">Type to search...</div>
+        <div class="result-list" id="result-list"></div>
+      </div>
+    </div>
+
+    <!-- LOCAL FILES PAGE -->
+    <div class="page" id="local-page">
+      <div class="local-hero">
+        <h1>Local Files</h1>
+        <p>Upload your music and play it directly in Vibeflow</p>
+      </div>
+      <div class="stats-row">
+        <div class="stat"><i class="fa-solid fa-music"></i><div class="stat-n" id="s-tracks">0</div><div class="stat-l">Tracks</div></div>
+        <div class="stat"><i class="fa-solid fa-clock"></i><div class="stat-n" id="s-time">0m</div><div class="stat-l">Duration</div></div>
+        <div class="stat"><i class="fa-solid fa-hard-drive"></i><div class="stat-n" id="s-size">0 MB</div><div class="stat-l">Storage</div></div>
+      </div>
+      <label class="dropzone" id="dropzone" for="file-input">
+        <i class="fa-solid fa-cloud-arrow-up"></i>
+        <h3>Drop files here or click to upload</h3>
+        <p>MP3 · WAV · FLAC · AAC supported</p>
+      </label>
+      <input type="file" id="file-input" accept="audio/*" multiple style="display:none">
+      <div style="padding:0 36px 36px">
+        <div class="result-list" id="local-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUEUE PANEL -->
+  <div class="q-panel" id="q-panel">
+    <div class="q-head">
+      <h3>Queue</h3>
+      <button class="q-close" id="q-close"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="q-tabs">
+      <button class="q-tab on" data-tab="queue">Queue</button>
+      <button class="q-tab" data-tab="recent">Recent</button>
+    </div>
+    <div class="q-body" id="q-body"></div>
+  </div>
+
+  <!-- PLAYER -->
+  <div class="player" id="player">
+    <div class="player-progress-line" id="player-prog-line"></div>
+    <div class="p-track">
+      <div class="p-cover" id="p-cover"></div>
+      <div class="p-info">
+        <div class="p-name" id="p-name">Select a track</div>
+        <div class="p-artist" id="p-artist">—</div>
+      </div>
+      <button class="p-like" id="p-like"><i class="fa-regular fa-heart"></i></button>
+    </div>
+    <div class="p-center">
+      <div class="p-btns">
+        <button class="p-btn" id="p-shuffle" title="Shuffle"><i class="fa-solid fa-shuffle"></i></button>
+        <button class="p-btn" id="p-prev" title="Previous"><i class="fa-solid fa-backward-step"></i></button>
+        <button class="p-play" id="p-play"><i class="fa-solid fa-play"></i></button>
+        <button class="p-btn" id="p-next" title="Next"><i class="fa-solid fa-forward-step"></i></button>
+        <button class="p-btn" id="p-repeat" title="Repeat"><i class="fa-solid fa-repeat"></i></button>
+      </div>
+      <div class="p-progress">
+        <span class="p-time" id="p-cur">0:00</span>
+        <div class="p-bar" id="p-bar"><div class="p-fill" id="p-fill"></div><div class="p-thumb"></div></div>
+        <span class="p-time r" id="p-tot">0:00</span>
+      </div>
+    </div>
+    <div class="p-right">
+      <button class="p-btn" id="p-mute"><i class="fa-solid fa-volume-high"></i></button>
+      <div class="vol-wrap">
+        <div class="vol-track" id="vol-track"><div class="vol-fill" id="vol-fill"></div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<audio id="audio"></audio>
+<script src="script.js"></script>
+</body>
+</html>

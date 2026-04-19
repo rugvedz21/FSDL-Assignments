@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Car Details — CarBazaar</title>
+<link rel="stylesheet" href="/css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Racing+Sans+One&display=swap" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar">
+  <a href="/" class="logo">🏎️ <span>Car</span>Bazaar</a>
+  <div class="nav-links">
+    <a href="/">Browse</a>
+    <a href="/new.html">Sell Your Car</a>
+    <a href="/bookings.html">Bookings</a>
+    <a href="/cart.html" class="cart-link">🛒 Cart <span class="badge" id="cartCount">0</span></a>
+  </div>
+</nav>
+
+<section class="detail" id="detail"></section>
+
+<section id="book" class="section">
+  <h2 class="section-title">📅 Book a Test Drive / Inquiry</h2>
+  <form id="bookingForm" class="form-card">
+    <input name="buyerName" placeholder="Your Name" required>
+    <input name="buyerEmail" type="email" placeholder="Email" required>
+    <input name="buyerPhone" placeholder="Phone" required>
+    <textarea name="message" placeholder="Any special requests..." rows="3"></textarea>
+    <button class="btn btn-primary" type="submit">Confirm Booking</button>
+  </form>
+</section>
+
+<section class="section">
+  <h2 class="section-title">Similar Cars</h2>
+  <div class="grid" id="similarGrid"></div>
+</section>
+
+<footer><p>© 2026 CarBazaar</p></footer>
+
+<script src="/js/app.js"></script>
+<script src="/js/detail.js"></script>
+</body>
+</html>

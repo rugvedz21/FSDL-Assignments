@@ -1,0 +1,22 @@
+<%- include('partials/header') %>
+<section class="section">
+  <h1 class="section-title">📋 All Bookings</h1>
+  <% if (!bookings.length) { %>
+    <div class="empty">No bookings yet.</div>
+  <% } %>
+  <div class="bookings">
+    <% bookings.forEach(b => { %>
+      <div class="booking-card">
+        <div class="booking-img" style="background-image:url('<%= b.car ? b.car.image : '' %>')"></div>
+        <div>
+          <h3><%= b.car ? b.car.brand + ' ' + b.car.model : 'Deleted car' %></h3>
+          <p><b><%= b.buyerName %></b> · <%= b.buyerEmail %> · <%= b.buyerPhone %></p>
+          <p class="meta"><%= b.message %></p>
+          <span class="status status-<%= b.status.toLowerCase() %>"><%= b.status %></span>
+          <span class="meta"> · <%= new Date(b.createdAt).toLocaleString() %></span>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</section>
+<%- include('partials/footer') %>

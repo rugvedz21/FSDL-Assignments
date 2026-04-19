@@ -1,0 +1,31 @@
+<%- include('partials/header') %>
+<section class="section">
+  <h1 class="section-title">🚙 Sell Your Car</h1>
+  <form action="/cars" method="POST" class="form-card big-form">
+    <div class="row">
+      <input name="brand" placeholder="Brand (e.g. Toyota)" required>
+      <input name="model" placeholder="Model (e.g. Fortuner)" required>
+    </div>
+    <div class="row">
+      <input name="year" type="number" placeholder="Year" required>
+      <input name="price" type="number" placeholder="Price (₹)" required>
+    </div>
+    <div class="row">
+      <input name="kmDriven" type="number" placeholder="KM Driven">
+      <input name="color" placeholder="Color">
+    </div>
+    <div class="row">
+      <select name="fuel">
+        <option>Petrol</option><option>Diesel</option><option>Electric</option><option>Hybrid</option><option>CNG</option>
+      </select>
+      <select name="transmission">
+        <option>Manual</option><option>Automatic</option>
+      </select>
+    </div>
+    <input name="location" placeholder="Location">
+    <input name="image" placeholder="Image URL (paste any car image link)">
+    <textarea name="description" placeholder="Describe your car..." rows="4"></textarea>
+    <button class="btn btn-primary" type="submit">List Car</button>
+  </form>
+</section>
+<%- include('partials/footer') %>

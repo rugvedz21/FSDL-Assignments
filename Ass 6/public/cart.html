@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cart — CarBazaar</title>
+<link rel="stylesheet" href="/css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Racing+Sans+One&display=swap" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar">
+  <a href="/" class="logo">🏎️ <span>Car</span>Bazaar</a>
+  <div class="nav-links">
+    <a href="/">Browse</a>
+    <a href="/new.html">Sell Your Car</a>
+    <a href="/bookings.html">Bookings</a>
+    <a href="/cart.html" class="cart-link">🛒 Cart <span class="badge" id="cartCount">0</span></a>
+  </div>
+</nav>
+
+<section class="section">
+  <h1 class="section-title">🛒 Your Garage Cart</h1>
+  <div id="cartList" class="cart-list"></div>
+  <div id="cartTotal" class="cart-total" style="display:none">
+    <h2>Total: ₹<span id="totalVal">0</span></h2>
+    <button class="btn btn-ghost" id="clearBtn">Clear Cart</button>
+    <button class="btn btn-primary" onclick="alert('🎉 Checkout flow coming soon!')">Checkout</button>
+  </div>
+  <div id="emptyCart" class="empty" style="display:none">Your cart is empty. <a href="/">Browse cars →</a></div>
+</section>
+
+<footer><p>© 2026 CarBazaar</p></footer>
+
+<script src="/js/app.js"></script>
+<script>
+async function loadCart() {
+  const r = await fetch('/api/cart');
+  const { cars, total } = await r.json();
+  const list = document.getElementById('cartList');
+  if (!cars.length) {
+    document.getElementById('emptyCart').style.display = 'block';
+    document.getElementById('cartTotal').style.display = 'none';
+    list.innerHTML = '';
+    return;
+  }
+  document.getElementById('emptyCart').style.display = 'none';
+  document.getElementById('cartTotal').style.display = 'block';
+  document.getElementById('totalVal').textContent = total.toLocaleString('en-IN');
+  list.innerHTML = cars.map(c => `
+    <div class="cart-item">
+      <div class="cart-img" style="background-image:url('${c.image}')"></div>
+      <div class="cart-info">
+        <h3>${c.brand} ${c.model}</h3>
+        <p class="meta">${c.year} · ${c.fuel} · ${c.location || ''}</p>
+        <p class="price">₹${c.price.toLocaleString('en-IN')}</p>
+      </div>
+      <button class="btn btn-danger" onclick="removeItem('${c._id}')">Remove</button>
+    </div>`).join('');
+}
+async function removeItem(id) {
+  await fetch('/api/cart/' + id, { method: 'DELETE' });
+  loadCart(); updateCartCount();
+}
+document.getElementById('clearBtn').addEventListener('click', async () => {
+  await fetch('/api/cart', { method: 'DELETE' });
+  loadCart(); updateCartCount();
+});
+loadCart();
+</script>
+</body>
+</html>
