@@ -36,7 +36,7 @@ Each assignment folder contains:
 
 ## Hosted Profile Website
 
-Live Link: https://rugvedz21.github.io/
+Live Link: https://rugvedz21.github.io/FSDL-Assignments/ (see `profile-website/` folder)
 
 ## Repository Link
 
