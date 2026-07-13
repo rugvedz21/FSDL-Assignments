@@ -1329,3 +1329,110 @@ footer {
     font-size: 1.2rem;
   }
 }
+
+/* ===================================
+   ENHANCED ANIMATIONS (v2)
+   =================================== */
+
+/* Scroll progress bar */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-light));
+  z-index: 9999;
+  transition: width 0.1s ease-out;
+  box-shadow: 0 0 10px var(--accent-glow-strong);
+}
+
+/* Cursor spotlight */
+.cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  will-change: transform;
+}
+.cursor-glow.active { opacity: 1; }
+
+/* Hero stats row */
+.hero-stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  margin: 2.5rem 0 3rem;
+  animation: fadeInUp 0.8s ease 0.5s both;
+}
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--accent-light), var(--accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.stat-label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  max-width: 120px;
+  margin-top: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Gradient-animated hero name */
+.hero h1 {
+  background: linear-gradient(90deg, var(--text-primary), var(--accent-light), var(--text-primary));
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: fadeInUp 0.8s ease 0.2s both, shine 6s linear infinite;
+}
+@keyframes shine {
+  to { background-position: 200% center; }
+}
+
+/* Tilt effect for project cards */
+.project-card {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* Skill tag stagger-in */
+.skill-tag {
+  opacity: 0;
+  transform: translateY(8px);
+  animation: tagPop 0.45s ease forwards;
+}
+@keyframes tagPop {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Magnetic buttons */
+.btn {
+  will-change: transform;
+}
+
+@media (max-width: 700px) {
+  .hero-stats { gap: 1.25rem; }
+  .cursor-glow { display: none; }
+}

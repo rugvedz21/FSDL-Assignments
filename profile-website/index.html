@@ -20,6 +20,12 @@
     <div class="spinner"></div>
   </div>
 
+  <!-- Scroll Progress Bar -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- Cursor Spotlight -->
+  <div class="cursor-glow" id="cursorGlow"></div>
+
   <!-- Navigation -->
   <div class="nav-container" id="nav">
     <nav>
@@ -57,7 +63,7 @@
         <span id="typed-text"></span><span class="cursor">|</span>
       </h2>
       <p class="hero-subtitle">
-        B.Tech CSE student passionate about building intelligent systems &mdash; from AI-powered grading tools to real-time flood alert platforms. I turn complex problems into clean, working solutions.
+        B.Tech Computer Engineering student building end-to-end AI systems &mdash; from fine-tuned LLMs and GPU-accelerated OCR grading engines to real-time gesture-controlled interfaces. I turn research ideas into shipped, working products.
       </p>
       <div class="cta-buttons">
         <a href="#" class="btn btn-primary" onclick="scrollToSection('portfolio')">View My Work</a>
@@ -79,6 +85,25 @@
         </a>
       </div>
     </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-num" data-count="500" data-suffix="K+">0</span>
+        <span class="stat-label">Q&amp;A pairs fine-tuned on</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" data-count="90.8" data-suffix="%">0</span>
+        <span class="stat-label">Grading model accuracy</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" data-count="7" data-suffix="ms">0</span>
+        <span class="stat-label">Per-assignment inference</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" data-count="100" data-suffix="+">0</span>
+        <span class="stat-label">Students upskilled</span>
+      </div>
+    </div>
+
     <div class="scroll-indicator">
       <span>Scroll down</span>
       <div class="scroll-arrow">
@@ -144,28 +169,29 @@
         <div class="skill-category-icon">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
         </div>
-        <h3>Machine Learning & AI</h3>
+        <h3>AI / ML</h3>
         <div class="skill-tags">
           <span class="skill-tag">PyTorch</span>
-          <span class="skill-tag">TensorFlow</span>
-          <span class="skill-tag">Scikit-learn</span>
-          <span class="skill-tag">CNN</span>
+          <span class="skill-tag">CNNs</span>
           <span class="skill-tag">Transfer Learning</span>
-          <span class="skill-tag">NLP</span>
+          <span class="skill-tag">scikit-learn</span>
+          <span class="skill-tag">TrOCR</span>
+          <span class="skill-tag">EasyOCR</span>
+          <span class="skill-tag">AMP</span>
         </div>
       </div>
 
       <div class="skill-category">
         <div class="skill-category-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         </div>
-        <h3>Programming Languages</h3>
+        <h3>LLMs</h3>
         <div class="skill-tags">
-          <span class="skill-tag">Python</span>
-          <span class="skill-tag">JavaScript</span>
-          <span class="skill-tag">C++</span>
-          <span class="skill-tag">SQL</span>
-          <span class="skill-tag">HTML/CSS</span>
+          <span class="skill-tag">HuggingFace Transformers</span>
+          <span class="skill-tag">Qwen3</span>
+          <span class="skill-tag">Fine-Tuning</span>
+          <span class="skill-tag">RLHF</span>
+          <span class="skill-tag">Streaming Inference</span>
         </div>
       </div>
 
@@ -173,27 +199,43 @@
         <div class="skill-category-icon">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
         </div>
-        <h3>Data & Visualization</h3>
+        <h3>MLOps &amp; Cloud</h3>
         <div class="skill-tags">
-          <span class="skill-tag">Pandas</span>
-          <span class="skill-tag">NumPy</span>
-          <span class="skill-tag">Matplotlib</span>
-          <span class="skill-tag">OpenCV</span>
-          <span class="skill-tag">Jupyter</span>
+          <span class="skill-tag">Git &amp; GitHub</span>
+          <span class="skill-tag">GCP Cloud Run</span>
+          <span class="skill-tag">FastAPI</span>
+          <span class="skill-tag">Flask</span>
+          <span class="skill-tag">REST APIs</span>
+          <span class="skill-tag">SQLite</span>
         </div>
       </div>
 
       <div class="skill-category">
         <div class="skill-category-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
         </div>
-        <h3>Tools & Platforms</h3>
+        <h3>CV &amp; Interfaces</h3>
         <div class="skill-tags">
-          <span class="skill-tag">Git & GitHub</span>
-          <span class="skill-tag">VS Code</span>
-          <span class="skill-tag">Linux</span>
-          <span class="skill-tag">MongoDB</span>
-          <span class="skill-tag">Node.js</span>
+          <span class="skill-tag">OpenCV</span>
+          <span class="skill-tag">MediaPipe</span>
+          <span class="skill-tag">NumPy</span>
+          <span class="skill-tag">Pandas</span>
+          <span class="skill-tag">Spotipy</span>
+          <span class="skill-tag">OAuth 2.0 PKCE</span>
+        </div>
+      </div>
+
+      <div class="skill-category">
+        <div class="skill-category-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </div>
+        <h3>Languages &amp; Frontend</h3>
+        <div class="skill-tags">
+          <span class="skill-tag">Python</span>
+          <span class="skill-tag">JavaScript</span>
+          <span class="skill-tag">C++</span>
+          <span class="skill-tag">C</span>
+          <span class="skill-tag">HTML5/CSS3</span>
         </div>
       </div>
     </div>
@@ -212,18 +254,18 @@
       <div class="project-card" onclick="openModal(1)">
         <div class="project-image">
           <div class="image-placeholder">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg>
           </div>
         </div>
         <div class="project-content">
-          <div class="project-meta">Machine Learning &bull; 2025</div>
-          <h3 class="project-title">AI Assignment Grading System</h3>
-          <p class="project-desc">Deep learning system using PyTorch & ResNet18 to auto-grade student assignments with 85-95% accuracy, reducing grading time by 80%.</p>
+          <div class="project-meta">LLM / MLOps &bull; 2025</div>
+          <h3 class="project-title">StackMind: Fine-Tuned LLM on Stack Overflow</h3>
+          <p class="project-desc">Fine-tuned Qwen3 on 500K+ Q&amp;A pairs, cutting hallucinations ~35% with a Git-versioned, CI-style MLOps pipeline shipping to a FastAPI/GCP streaming API.</p>
           <div class="project-tags">
-            <span class="tag">PyTorch</span>
-            <span class="tag">ResNet18</span>
-            <span class="tag">CNN</span>
-            <span class="tag">Transfer Learning</span>
+            <span class="tag">Qwen3</span>
+            <span class="tag">HuggingFace</span>
+            <span class="tag">FastAPI</span>
+            <span class="tag">GCP</span>
           </div>
         </div>
       </div>
@@ -232,17 +274,18 @@
       <div class="project-card" onclick="openModal(2)">
         <div class="project-image">
           <div class="image-placeholder">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
           </div>
         </div>
         <div class="project-content">
-          <div class="project-meta">Full Stack &bull; 2024</div>
-          <h3 class="project-title">Local Music Player</h3>
-          <p class="project-desc">Spotify-inspired music player with playlist management, album art, and smooth playback controls built with a modern UI.</p>
+          <div class="project-meta">Machine Learning &bull; 2025</div>
+          <h3 class="project-title">AI Assignment Grader: GPU OCR + Auto-Scoring</h3>
+          <p class="project-desc">7ms per-assignment inference on a 4GB GTX 1650 with a hybrid EasyOCR + fine-tuned TrOCR pipeline, lifting OCR recall from ~33% to 100% on noisy handwriting.</p>
           <div class="project-tags">
-            <span class="tag">JavaScript</span>
-            <span class="tag">HTML/CSS</span>
-            <span class="tag">Web Audio API</span>
+            <span class="tag">PyTorch</span>
+            <span class="tag">TrOCR</span>
+            <span class="tag">EasyOCR</span>
+            <span class="tag">Flask</span>
           </div>
         </div>
       </div>
@@ -251,38 +294,18 @@
       <div class="project-card" onclick="openModal(3)">
         <div class="project-image">
           <div class="image-placeholder">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
-          </div>
-        </div>
-        <div class="project-content">
-          <div class="project-meta">Data Analysis &bull; 2024</div>
-          <h3 class="project-title">DWLR Flood Alert System</h3>
-          <p class="project-desc">Anomaly detection system analyzing DWLR water-level data using Z-score thresholds, with automated SMTP email alerts.</p>
-          <div class="project-tags">
-            <span class="tag">Python</span>
-            <span class="tag">Z-Score</span>
-            <span class="tag">Data Analysis</span>
-            <span class="tag">SMTP</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Project 4 -->
-      <div class="project-card" onclick="openModal(4)">
-        <div class="project-image">
-          <div class="image-placeholder">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
           </div>
         </div>
         <div class="project-content">
           <div class="project-meta">Computer Vision &bull; 2024</div>
-          <h3 class="project-title">Grain Color Sorter</h3>
-          <p class="project-desc">Computer vision pipeline using OpenCV and CNNs for automated grain classification through color detection and segmentation.</p>
+          <h3 class="project-title">NOVA: Gesture-Controlled Spotify Player</h3>
+          <p class="project-desc">Touchless Spotify controller using MediaPipe Hands for real-time gesture recognition, with full Spotify Connect integration via OAuth 2.0 PKCE.</p>
           <div class="project-tags">
-            <span class="tag">Python</span>
             <span class="tag">OpenCV</span>
-            <span class="tag">CNN</span>
-            <span class="tag">Image Processing</span>
+            <span class="tag">MediaPipe</span>
+            <span class="tag">Spotipy</span>
+            <span class="tag">OAuth 2.0</span>
           </div>
         </div>
       </div>
@@ -307,10 +330,10 @@
           <div class="timeline-item">
             <div class="timeline-dot"></div>
             <div class="timeline-content">
-              <div class="timeline-date">2023 &mdash; Present</div>
-              <h4>B.Tech in Computer Science & Engineering</h4>
-              <p class="timeline-place">University Name</p>
-              <p class="timeline-desc">Focusing on Machine Learning, Data Structures, Algorithms, and Software Engineering. Active contributor to college tech community.</p>
+              <div class="timeline-date">2023 &mdash; 2027</div>
+              <h4>B.Tech, Computer Engineering</h4>
+              <p class="timeline-place">Pimpri Chinchwad College of Engineering, Pune</p>
+              <p class="timeline-desc">Coursework: Machine Learning, Neural Networks, Data Structures &amp; Algorithms, DBMS, Statistics.</p>
             </div>
           </div>
           <div class="timeline-item">
@@ -342,19 +365,19 @@
           <div class="timeline-item">
             <div class="timeline-dot"></div>
             <div class="timeline-content">
-              <div class="timeline-date">2024 &mdash; Present</div>
-              <h4>ML Developer (Self-directed Projects)</h4>
-              <p class="timeline-place">Independent</p>
-              <p class="timeline-desc">Built end-to-end ML pipelines including an AI grading system (PyTorch/ResNet18) and grain color sorter (OpenCV/CNN). Focused on real-world deployment and accuracy optimization.</p>
+              <div class="timeline-date">Sep 2024 &mdash; Apr 2025</div>
+              <h4>Design &amp; AI/ML Team Member</h4>
+              <p class="timeline-place">Google Developer Group on Campus (GDGOC) &mdash; PCCOE</p>
+              <p class="timeline-desc">Upskilled 100+ students by co-facilitating PyTorch, Git, and model evaluation workshops (12+ student-led ML projects at the semester showcase). Delivered a production NFC/RFID Attendance System with a REST API backend, cutting manual attendance overhead ~80% across 3 departments.</p>
             </div>
           </div>
           <div class="timeline-item">
             <div class="timeline-dot"></div>
             <div class="timeline-content">
-              <div class="timeline-date">2024</div>
-              <h4>Data Analysis &mdash; DWLR Flood Alerts</h4>
-              <p class="timeline-place">Academic Project</p>
-              <p class="timeline-desc">Designed anomaly detection pipeline for water-level monitoring using statistical methods (Z-score) with automated email alert system via SMTP.</p>
+              <div class="timeline-date">Feb 2024</div>
+              <h4>Core Team Member</h4>
+              <p class="timeline-place">Spectrum 2024 &mdash; PCCOE Annual Technical Fest</p>
+              <p class="timeline-desc">Executed a 500+ attendee event with zero critical incidents, coordinated 8 volunteer teams, and ran campaigns that exceeded registration targets by 20%.</p>
             </div>
           </div>
         </div>

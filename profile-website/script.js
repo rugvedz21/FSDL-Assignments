@@ -5,35 +5,27 @@
 // Project Data
 const projects = {
   1: {
-    title: 'AI Assignment Grading System',
-    meta: 'Machine Learning &bull; 2025',
-    description: 'An AI-powered grading system using deep learning to automatically classify student assignments as correct or incorrect. Built with PyTorch and ResNet18 for fast batch processing and intelligent feedback.',
-    tags: ['PyTorch', 'ResNet18', 'CNN', 'Transfer Learning', 'Python'],
-    details: 'This project streamlines educational grading by leveraging computer vision and transfer learning to analyze assignment submissions with 85-95% accuracy. The system features confidence-based quality control, concept gap identification, and batch processing capabilities that reduce grading time by 80% while maintaining consistent evaluation standards across all submissions.',
+    title: 'StackMind: Fine-Tuned LLM on Stack Overflow Dataset',
+    meta: 'LLM / MLOps &bull; 2025',
+    description: 'A fine-tuned Qwen3 model trained on 500K+ Stack Overflow Q&A pairs, reducing hallucination rate by ~35% versus the base model through RLHF-aligned instruction formatting and automated BLEU/F1 evaluation.',
+    tags: ['Qwen3', 'HuggingFace Transformers', 'FastAPI', 'GCP Cloud Run', 'Git'],
+    details: 'Replaced ad-hoc Colab notebooks with CI-style training loops, checkpoint versioning, and Precision/Recall tracking across every run — cutting model iteration time by ~40%. Currently building a production streaming REST API (FastAPI) on GCP Cloud Run, with the model card and weights slated for release on HuggingFace Hub.',
     links: { github: 'https://github.com/rugvedz21' }
   },
   2: {
-    title: 'Local Music Player',
-    meta: 'Full Stack &bull; 2024',
-    description: 'A Spotify-inspired music player application with a sleek, modern interface. Features include playlist management, album art display, and intuitive playback controls.',
-    tags: ['JavaScript', 'HTML/CSS', 'Web Audio API', 'UI Design'],
-    details: 'A comprehensive music player built from scratch featuring playlist creation and management, album art display, smooth animations, and responsive controls for play, pause, skip, and volume. The UI is designed for a vibrant and engaging user experience while maintaining a cohesive visual identity.',
+    title: 'AI Assignment Grader: GPU OCR and Auto-Scoring Engine',
+    meta: 'Machine Learning &bull; 2025',
+    description: 'An end-to-end grading engine combining OCR and a fine-tuned scoring model to auto-grade handwritten assignments — 7ms per-assignment inference on a 4GB GTX 1650 using AMP mixed precision.',
+    tags: ['PyTorch', 'TrOCR', 'EasyOCR', 'Flask', 'SQLite'],
+    details: 'A hybrid EasyOCR (line detection) + fine-tuned Microsoft TrOCR (handwriting) pipeline, tolerant of skewed phone photos via auto orientation detection. A fragment-tolerant fuzzy matcher (difflib SequenceMatcher) reconstructs OCR-shattered words, lifting recall from ~33% to 100% on noisy handwriting. The explainable grading engine flags missing concepts, negation-detected wrong statements, and OCR misreads without an LLM — backed by a ResNet18 score-bucket classifier at 90.8% accuracy, shipped end-to-end with a Flask + HTML/CSS/JS frontend.',
     links: { github: 'https://github.com/rugvedz21' }
   },
   3: {
-    title: 'DWLR Flood Alert System',
-    meta: 'Data Analysis &bull; 2024',
-    description: 'Anomaly detection system that analyzes DWLR water-level data using Z-score based threshold detection, triggering automated alerts when levels exceed thresholds.',
-    tags: ['Python', 'Pandas', 'Z-Score', 'SMTP', 'Data Analysis'],
-    details: 'Designed and implemented a statistical anomaly detection pipeline for real-time water level monitoring. The system processes DWLR sensor data, applies Z-score based anomaly detection to identify dangerous water levels, and automatically triggers email alerts via SMTP when thresholds are breached. Built for reliability and early warning in flood-prone regions.',
-    links: { github: 'https://github.com/rugvedz21' }
-  },
-  4: {
-    title: 'Grain Color Sorter',
+    title: 'NOVA: Gesture-Controlled Spotify Player',
     meta: 'Computer Vision &bull; 2024',
-    description: 'Computer vision system for grain classification using image processing and CNN models, featuring automated color detection, segmentation, and type identification.',
-    tags: ['Python', 'OpenCV', 'CNN', 'Image Processing', 'NumPy'],
-    details: 'This project implements a grain color sorting system that utilizes computer vision techniques and convolutional neural networks (CNNs) to classify grains based on their color. The system processes images of grains, applies image processing algorithms for color detection and segmentation, and uses a trained CNN model to identify the type of grain. Designed to improve efficiency and accuracy in agricultural sorting processes.',
+    description: 'A touchless Spotify controller using MediaPipe Hands (21 landmarks/hand) to classify real-time finger-state gestures via webcam for play, pause, skip, and volume control.',
+    tags: ['Python', 'OpenCV', 'MediaPipe', 'Spotipy', 'OAuth 2.0 PKCE'],
+    details: 'Zero accidental triggers via a hold-frame debouncer and cooldown logic. Full Spotify Connect integration via Spotipy and the Spotify Web Playback SDK — registers as a named Connect device in the browser using client-side-only OAuth 2.0 PKCE, targeting it by name across search, playlists, library, and queue.',
     links: { github: 'https://github.com/rugvedz21' }
   }
 };
@@ -54,9 +46,9 @@ window.addEventListener('load', () => {
    =================================== */
 
 const roles = [
-  'Machine Learning Developer',
-  'Computer Vision Enthusiast',
-  'Python Developer',
+  'ML / LLM Engineer',
+  'Computer Vision Builder',
+  'MLOps Enthusiast',
   'CS Student & Builder'
 ];
 
@@ -284,3 +276,106 @@ window.addEventListener('scroll', () => {
     ticking = true;
   }
 });
+
+/* ===================================
+   ENHANCED ANIMATIONS (v2)
+   =================================== */
+
+// Scroll progress bar
+const scrollProgress = document.getElementById('scrollProgress');
+function updateScrollProgress() {
+  if (!scrollProgress) return;
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+  scrollProgress.style.width = `${pct}%`;
+}
+window.addEventListener('scroll', updateScrollProgress, { passive: true });
+updateScrollProgress();
+
+// Cursor spotlight (desktop only)
+const cursorGlow = document.getElementById('cursorGlow');
+if (cursorGlow && window.matchMedia('(hover: hover)').matches) {
+  let glowX = 0, glowY = 0, curX = 0, curY = 0;
+  document.addEventListener('mousemove', (e) => {
+    glowX = e.clientX;
+    glowY = e.clientY;
+    cursorGlow.classList.add('active');
+  });
+  function animateGlow() {
+    curX += (glowX - curX) * 0.12;
+    curY += (glowY - curY) * 0.12;
+    cursorGlow.style.transform = `translate(${curX}px, ${curY}px) translate(-50%, -50%)`;
+    requestAnimationFrame(animateGlow);
+  }
+  animateGlow();
+  document.addEventListener('mouseleave', () => cursorGlow.classList.remove('active'));
+}
+
+// Animated stat counters
+const statNums = document.querySelectorAll('.stat-num');
+const statObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const el = entry.target;
+    const target = parseFloat(el.dataset.count);
+    const suffix = el.dataset.suffix || '';
+    const isDecimal = target % 1 !== 0;
+    let current = 0;
+    const steps = 40;
+    const increment = target / steps;
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= target) {
+        el.textContent = (isDecimal ? target.toFixed(1) : target) + suffix;
+        clearInterval(timer);
+      } else {
+        el.textContent = (isDecimal ? current.toFixed(1) : Math.floor(current)) + suffix;
+      }
+    }, 30);
+    statObserver.unobserve(el);
+  });
+}, { threshold: 0.6 });
+statNums.forEach(el => statObserver.observe(el));
+
+// 3D tilt effect on project cards
+document.querySelectorAll('.project-card').forEach(card => {
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const rotateX = ((y / rect.height) - 0.5) * -8;
+    const rotateY = ((x / rect.width) - 0.5) * 8;
+    card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+  });
+});
+
+// Magnetic buttons
+document.querySelectorAll('.btn').forEach(btn => {
+  btn.addEventListener('mousemove', (e) => {
+    const rect = btn.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    btn.style.transform = `translate(${x * 0.18}px, ${y * 0.35}px)`;
+  });
+  btn.addEventListener('mouseleave', () => {
+    btn.style.transform = '';
+  });
+});
+
+// Staggered skill-tag reveal per category
+const skillCategories = document.querySelectorAll('.skill-category');
+const skillObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const tags = entry.target.querySelectorAll('.skill-tag');
+    tags.forEach((tag, i) => {
+      tag.style.animationDelay = `${i * 70}ms`;
+    });
+    skillObserver.unobserve(entry.target);
+  });
+}, { threshold: 0.2 });
+skillCategories.forEach(cat => skillObserver.observe(cat));
