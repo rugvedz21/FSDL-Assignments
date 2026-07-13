@@ -1,4 +1,4 @@
-# Assignment 03 — StormPulse (Live Weather Dashboard)
+# Assignment 04 — StormPulse (Live Weather Dashboard)
 
 ## Description
 A single-page live weather dashboard with animated particle effects and interactive charts for visualizing weather data trends.

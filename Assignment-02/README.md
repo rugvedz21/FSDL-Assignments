@@ -1,4 +1,4 @@
-# Assignment 01 — Vibeflow (Music Player UI)
+# Assignment 02 — Vibeflow (Music Player UI)
 
 ## Description
 A static front-end music player interface ("Vibeflow") featuring a sidebar navigation, animated logo, and a rap/hip-hop themed player layout.

@@ -1,4 +1,4 @@
-# Assignment 04 — Travel Destination Booking App
+# Assignment 05 — Travel Destination Booking App
 
 ## Description
 A full-stack travel booking application. Users can browse travel destinations and create bookings. Data is persisted using flat JSON files acting as a lightweight NoSQL-style store.

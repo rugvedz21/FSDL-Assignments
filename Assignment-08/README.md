@@ -1,4 +1,4 @@
-# Assignment 06 — Student Feedback Review System (MERN)
+# Assignment 08 — Student Feedback Review System (MERN)
 
 ## Description
 A MERN-stack application where students submit course feedback and admins review aggregated ratings. Includes JWT-based authentication and role-based access (student/admin).

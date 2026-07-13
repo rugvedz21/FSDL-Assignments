@@ -1,4 +1,4 @@
-# Assignment 05 — CarBazaar (Used Car E-commerce Portal)
+# Assignment 06 — CarBazaar (Used Car E-commerce Portal)
 
 ## Description
 A full-stack used-car marketplace where users can browse, search, filter and sort listings, book test drives, manage a session-based shopping cart, and perform full CRUD on car listings.
