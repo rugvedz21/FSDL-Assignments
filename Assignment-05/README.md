@@ -1,17 +1,16 @@
-# Assignment 05 — CarBazaar (Used Car E-commerce Portal)
+# Assignment 04 — Travel Destination Booking App
 
 ## Description
-A full-stack used-car marketplace where users can browse, search, filter and sort listings, book test drives, manage a session-based shopping cart, and perform full CRUD on car listings.
+A full-stack travel booking application. Users can browse travel destinations and create bookings. Data is persisted using flat JSON files acting as a lightweight NoSQL-style store.
 
 ## Technologies Used
 - Node.js
 - Express.js
-- MongoDB + Mongoose
-- EJS templating
-- express-session, dotenv
+- JSON file-based storage
+- HTML/CSS/JavaScript (frontend, served statically)
 
 ## Folder Contents
-- `source-code/` — server.js, seed.js, routes/, models/, views/ (EJS), public/ (CSS/JS)
+- `source-code/` — server.js, public/ (frontend), data/ (JSON data store), package.json
 - `output-screenshots/` — add screenshots of the running app here
 - `Assignment-Brief.pdf` — original assignment problem statement
 
@@ -19,7 +18,6 @@ A full-stack used-car marketplace where users can browse, search, filter and sor
 ```bash
 cd source-code
 npm install
-# ensure MongoDB is running locally (mongodb://127.0.0.1:27017)
-npm run seed     # optional: seed sample cars
-npm start
+node server.js
 ```
+Then open the printed local URL (default port 4000) in a browser.

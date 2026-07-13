@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Bookings — CarBazaar</title>
+<link rel="stylesheet" href="/css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Racing+Sans+One&display=swap" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar">
+  <a href="/" class="logo">🏎️ <span>Car</span>Bazaar</a>
+  <div class="nav-links">
+    <a href="/">Browse</a>
+    <a href="/new.html">Sell Your Car</a>
+    <a href="/bookings.html">Bookings</a>
+    <a href="/cart.html" class="cart-link">🛒 Cart <span class="badge" id="cartCount">0</span></a>
+  </div>
+</nav>
+
+<section class="section">
+  <h1 class="section-title">📋 All Bookings</h1>
+  <div id="bookingsList" class="bookings"></div>
+  <div id="emptyBookings" class="empty" style="display:none">No bookings yet.</div>
+</section>
+
+<footer><p>© 2026 CarBazaar</p></footer>
+
+<script src="/js/app.js"></script>
+<script>
+(async () => {
+  const bookings = await fetch('/api/bookings').then(r => r.json());
+  const list = document.getElementById('bookingsList');
+  if (!bookings.length) { document.getElementById('emptyBookings').style.display = 'block'; return; }
+  list.innerHTML = bookings.map(b => `
+    <div class="booking-card">
+      <div class="booking-img" style="background-image:url('${b.car ? b.car.image : ''}')"></div>
+      <div>
+        <h3>${b.car ? b.car.brand + ' ' + b.car.model : 'Deleted car'}</h3>
+        <p><b>${b.buyerName}</b> · ${b.buyerEmail} · ${b.buyerPhone}</p>
+        <p class="meta">${b.message || ''}</p>
+        <span class="status status-${b.status.toLowerCase()}">${b.status}</span>
+        <span class="meta"> · ${new Date(b.createdAt).toLocaleString()}</span>
+      </div>
+    </div>`).join('');
+})();
+</script>
+</body>
+</html>

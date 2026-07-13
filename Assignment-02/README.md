@@ -1,17 +1,16 @@
-# Assignment 02 — Court Vigilante (Basketball Shoe Landing Page)
+# Assignment 01 — Vibeflow (Music Player UI)
 
 ## Description
-A responsive marketing/landing page for a fictional basketball sneaker brand ("Court Vigilante"), featuring a preloader, animated particle background, and a Bootstrap-based navbar.
+A static front-end music player interface ("Vibeflow") featuring a sidebar navigation, animated logo, and a rap/hip-hop themed player layout.
 
 ## Technologies Used
 - HTML5
-- Bootstrap 5
-- CSS3
+- CSS3 (custom styling in `amazing.css`)
 - JavaScript
 - Font Awesome icons, Google Fonts
 
 ## Folder Contents
-- `source-code/` — index.html, style.css, app.js, images/
+- `source-code/` — index.html, amazing.css, script.js
 - `output-screenshots/` — add screenshots of the running page here
 - `Assignment-Brief.pdf` — original assignment problem statement
 

@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StormPulse — Live Weather Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0b0f1a;
+    --card: #131a2e;
+    --card-hover: #1a2340;
+    --accent: #38bdf8;
+    --accent2: #a78bfa;
+    --accent3: #f472b6;
+    --accent4: #34d399;
+    --text: #e2e8f0;
+    --text-dim: #64748b;
+    --border: #1e293b;
+    --glow: rgba(56, 189, 248, 0.15);
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .particles {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0; overflow: hidden;
+  }
+  .particle {
+    position: absolute;
+    background: var(--accent);
+    border-radius: 50%;
+    opacity: 0;
+    animation: float linear infinite;
+  }
+  @keyframes float {
+    0% { opacity: 0; transform: translateY(100vh) scale(0); }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.6; }
+    100% { opacity: 0; transform: translateY(-10vh) scale(1); }
+  }
+
+  header {
+    position: relative; z-index: 1;
+    padding: 24px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(12px);
+    background: rgba(11, 15, 26, 0.8);
+  }
+  .logo {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 22px; font-weight: 700; letter-spacing: -0.5px;
+  }
+  .logo svg { filter: drop-shadow(0 0 8px var(--accent)); }
+  .logo span { color: var(--accent); }
+
+  .city-selector {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .city-selector select {
+    background: var(--card); color: var(--text); border: 1px solid var(--border);
+    padding: 8px 16px; border-radius: 8px; font-size: 14px; font-family: inherit;
+    cursor: pointer; outline: none; transition: border-color 0.2s;
+  }
+  .city-selector select:hover { border-color: var(--accent); }
+  .live-dot {
+    width: 8px; height: 8px; background: #22c55e; border-radius: 50%;
+    animation: pulse-dot 2s ease infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.5); }
+    50% { box-shadow: 0 0 0 6px rgba(34,197,94,0); }
+  }
+  .live-label { font-size: 12px; color: #22c55e; font-weight: 500; }
+
+  .dashboard {
+    position: relative; z-index: 1;
+    max-width: 1400px; margin: 0 auto;
+    padding: 32px 40px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto auto auto;
+    gap: 20px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .card:hover {
+    background: var(--card-hover);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3), 0 0 30px var(--glow);
+  }
+  .card:hover::before { opacity: 1; }
+
+  .card-title {
+    font-size: 12px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 1.2px; color: var(--text-dim); margin-bottom: 12px;
+  }
+
+  .hero-card {
+    grid-column: span 2;
+    display: flex; flex-direction: column; justify-content: space-between;
+    background: linear-gradient(135deg, #131a2e 0%, #1a1040 100%);
+  }
+  .hero-temp {
+    font-size: 96px; font-weight: 200; line-height: 1;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero-condition { font-size: 20px; color: var(--text-dim); margin-top: 4px; }
+  .hero-details {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px;
+  }
+  .hero-detail-item { text-align: center; }
+  .hero-detail-value { font-size: 24px; font-weight: 600; }
+  .hero-detail-label { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+  .hero-weather-icon { font-size: 64px; position: absolute; top: 24px; right: 32px; }
+
+  .stat-card .stat-value {
+    font-size: 36px; font-weight: 600; margin-bottom: 4px;
+  }
+  .stat-card .stat-sub { font-size: 13px; color: var(--text-dim); }
+  .stat-card .stat-icon {
+    position: absolute; top: 20px; right: 20px;
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+
+  .chart-card { grid-column: span 2; height: 320px; }
+  .chart-card canvas { height: 260px !important; }
+
+  .radar-card { grid-column: span 1; height: 320px; }
+  .radar-card canvas { height: 260px !important; }
+  .doughnut-card { grid-column: span 1; height: 320px; }
+  .doughnut-card canvas { height: 220px !important; }
+
+  .forecast-card {
+    grid-column: span 4;
+    display: flex; flex-direction: column;
+  }
+  .forecast-row {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 12px; margin-top: 16px;
+  }
+  .forecast-day {
+    text-align: center; padding: 16px 8px;
+    background: rgba(255,255,255,0.02);
+    border-radius: 12px; border: 1px solid transparent;
+    transition: all 0.25s;
+  }
+  .forecast-day:hover {
+    border-color: var(--accent);
+    background: rgba(56,189,248,0.06);
+    transform: scale(1.05);
+  }
+  .forecast-day .day-name { font-size: 12px; color: var(--text-dim); font-weight: 600; }
+  .forecast-day .day-icon { font-size: 28px; margin: 8px 0; }
+  .forecast-day .day-high { font-size: 18px; font-weight: 600; }
+  .forecast-day .day-low { font-size: 13px; color: var(--text-dim); }
+
+  /* Popup overlay */
+  .popup-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .popup-overlay.active { opacity: 1; pointer-events: all; }
+
+  .popup {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 0;
+    max-width: 520px; width: 90%;
+    transform: scale(0.9) translateY(20px);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+  }
+  .popup-overlay.active .popup {
+    transform: scale(1) translateY(0);
+  }
+  .popup-header {
+    padding: 24px 28px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .popup-header h2 { font-size: 18px; font-weight: 600; }
+  .popup-close {
+    width: 32px; height: 32px; border-radius: 8px;
+    border: 1px solid var(--border); background: transparent;
+    color: var(--text-dim); cursor: pointer; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .popup-close:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+  .popup-body { padding: 0 28px 28px; }
+  .popup-body canvas { max-height: 240px; }
+  .popup-stats {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;
+  }
+  .popup-stat {
+    background: rgba(255,255,255,0.03); padding: 14px; border-radius: 10px;
+  }
+  .popup-stat-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.8px; }
+  .popup-stat-value { font-size: 22px; font-weight: 600; margin-top: 4px; }
+
+  /* Toast notification */
+  .toast {
+    position: fixed; bottom: 32px; right: 32px;
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    border: 1px solid var(--accent);
+    border-radius: 12px; padding: 16px 24px;
+    z-index: 2000;
+    display: flex; align-items: center; gap: 12px;
+    transform: translateY(120px); opacity: 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 32px rgba(56,189,248,0.2);
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast-icon { font-size: 20px; }
+  .toast-text { font-size: 13px; }
+  .toast-text strong { display: block; font-size: 14px; margin-bottom: 2px; }
+
+  /* Tooltip */
+  .tip {
+    position: absolute; background: #1e293b; color: var(--text);
+    font-size: 12px; padding: 8px 14px; border-radius: 8px;
+    border: 1px solid var(--border);
+    pointer-events: none; opacity: 0; transition: opacity 0.2s;
+    white-space: nowrap; z-index: 500;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  }
+  .tip::after {
+    content: ''; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%);
+    border-left: 5px solid transparent; border-right: 5px solid transparent;
+    border-top: 5px solid #1e293b;
+  }
+
+  @media (max-width: 900px) {
+    .dashboard { grid-template-columns: 1fr 1fr; padding: 16px; }
+    .hero-card, .chart-card, .forecast-card { grid-column: span 2; }
+    .forecast-row { grid-template-columns: repeat(4, 1fr); }
+    header { padding: 16px 20px; }
+  }
+  @media (max-width: 520px) {
+    .dashboard { grid-template-columns: 1fr; }
+    .hero-card, .chart-card, .forecast-card, .radar-card, .doughnut-card { grid-column: span 1; }
+    .forecast-row { grid-template-columns: repeat(3, 1fr); }
+    .hero-temp { font-size: 64px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="particles" id="particles"></div>
+
+<header>
+  <div class="logo">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round">
+      <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+    </svg>
+    <span>Storm</span>Pulse
+  </div>
+  <div class="city-selector">
+    <div class="live-dot"></div>
+    <span class="live-label">LIVE</span>
+    <select id="citySelect">
+      <option value="mumbai">Mumbai, India</option>
+      <option value="tokyo">Tokyo, Japan</option>
+      <option value="london">London, UK</option>
+      <option value="newyork">New York, USA</option>
+      <option value="sydney">Sydney, Australia</option>
+    </select>
+  </div>
+</header>
+
+<div class="dashboard">
+  <div class="card hero-card" onclick="openPopup('temperature')">
+    <div>
+      <div class="card-title">Current Weather</div>
+      <div class="hero-temp" id="heroTemp">32°</div>
+      <div class="hero-condition" id="heroCondition">Partly Cloudy</div>
+    </div>
+    <div class="hero-weather-icon" id="heroIcon">⛅</div>
+    <div class="hero-details">
+      <div class="hero-detail-item">
+        <div class="hero-detail-value" id="feelsLike">35°</div>
+        <div class="hero-detail-label">Feels Like</div>
+      </div>
+      <div class="hero-detail-item">
+        <div class="hero-detail-value" id="heroHumidity">72%</div>
+        <div class="hero-detail-label">Humidity</div>
+      </div>
+      <div class="hero-detail-item">
+        <div class="hero-detail-value" id="heroPressure">1012</div>
+        <div class="hero-detail-label">hPa</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card stat-card" onclick="openPopup('wind')">
+    <div class="card-title">Wind Speed</div>
+    <div class="stat-value" id="windSpeed" style="color:var(--accent)">18 km/h</div>
+    <div class="stat-sub" id="windDir">NW — Gentle Breeze</div>
+    <div class="stat-icon" style="background:rgba(56,189,248,0.12)">💨</div>
+  </div>
+
+  <div class="card stat-card" onclick="openPopup('uv')">
+    <div class="card-title">UV Index</div>
+    <div class="stat-value" id="uvValue" style="color:var(--accent3)">6</div>
+    <div class="stat-sub" id="uvLabel">High — Wear Sunscreen</div>
+    <div class="stat-icon" style="background:rgba(244,114,182,0.12)">☀️</div>
+  </div>
+
+  <div class="card stat-card" onclick="openPopup('visibility')">
+    <div class="card-title">Visibility</div>
+    <div class="stat-value" id="visValue" style="color:var(--accent4)">8.5 km</div>
+    <div class="stat-sub">Good</div>
+    <div class="stat-icon" style="background:rgba(52,211,153,0.12)">👁️</div>
+  </div>
+
+  <div class="card stat-card" onclick="openPopup('rain')">
+    <div class="card-title">Rain Chance</div>
+    <div class="stat-value" id="rainChance" style="color:var(--accent2)">45%</div>
+    <div class="stat-sub" id="rainSub">Light showers expected</div>
+    <div class="stat-icon" style="background:rgba(167,139,250,0.12)">🌧️</div>
+  </div>
+
+  <div class="card chart-card">
+    <div class="card-title">24-Hour Temperature Trend</div>
+    <canvas id="tempChart"></canvas>
+  </div>
+
+  <div class="card chart-card">
+    <div class="card-title">Hourly Precipitation & Humidity</div>
+    <canvas id="precipChart"></canvas>
+  </div>
+
+  <div class="card radar-card">
+    <div class="card-title">Air Quality Breakdown</div>
+    <canvas id="aqiRadar"></canvas>
+  </div>
+
+  <div class="card doughnut-card" onclick="openPopup('aqi')">
+    <div class="card-title">Overall AQI</div>
+    <canvas id="aqiDoughnut"></canvas>
+    <div style="text-align:center;margin-top:8px;font-size:13px;color:var(--text-dim)" id="aqiLabel">Moderate — 128</div>
+  </div>
+
+  <div class="card forecast-card">
+    <div class="card-title">7-Day Forecast</div>
+    <div class="forecast-row" id="forecastRow"></div>
+  </div>
+</div>
+
+<div class="popup-overlay" id="popupOverlay" onclick="closePopup(event)">
+  <div class="popup" onclick="event.stopPropagation()">
+    <div class="popup-header">
+      <h2 id="popupTitle">Details</h2>
+      <button class="popup-close" onclick="closePopup()">&times;</button>
+    </div>
+    <div class="popup-body" id="popupBody"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <span class="toast-icon">⚡</span>
+  <span class="toast-text" id="toastText"><strong>Weather Alert</strong>UV index rising — stay hydrated!</span>
+</div>
+
+<div class="tip" id="tooltip"></div>
+
+<script>
+const CITIES = {
+  mumbai: {
+    name: 'Mumbai', temp: 32, feelsLike: 35, condition: 'Partly Cloudy', icon: '⛅',
+    humidity: 72, pressure: 1012, wind: 18, windDir: 'NW', uv: 6, vis: 8.5, rain: 45,
+    aqi: 128, aqiLabel: 'Moderate',
+    hourlyTemp: [28,27,27,26,26,27,28,30,31,32,33,34,34,33,33,32,31,30,29,29,28,28,27,27],
+    hourlyPrecip: [0,0,5,10,15,5,0,0,0,0,10,20,35,40,30,15,5,0,0,0,5,10,5,0],
+    hourlyHumidity: [78,80,82,84,83,80,76,72,68,65,63,64,68,72,74,73,70,68,70,73,76,78,79,80],
+    aqiBreakdown: [42,68,85,55,38,30],
+    forecast: [
+      {day:'Mon',icon:'⛅',high:33,low:26},{day:'Tue',icon:'🌧️',high:30,low:25},
+      {day:'Wed',icon:'⛈️',high:28,low:24},{day:'Thu',icon:'🌦️',high:29,low:25},
+      {day:'Fri',icon:'☀️',high:34,low:27},{day:'Sat',icon:'☀️',high:35,low:28},
+      {day:'Sun',icon:'⛅',high:33,low:27}
+    ]
+  },
+  tokyo: {
+    name: 'Tokyo', temp: 18, feelsLike: 16, condition: 'Clear Sky', icon: '☀️',
+    humidity: 55, pressure: 1018, wind: 12, windDir: 'E', uv: 4, vis: 12, rain: 10,
+    aqi: 62, aqiLabel: 'Good',
+    hourlyTemp: [14,13,13,12,12,13,15,16,17,18,19,20,20,19,19,18,17,16,15,15,14,14,13,13],
+    hourlyPrecip: [0,0,0,0,0,0,0,0,0,0,0,5,5,0,0,0,0,0,0,0,0,0,0,0],
+    hourlyHumidity: [62,65,67,70,68,64,58,55,52,50,48,49,52,56,58,60,62,65,67,68,64,62,61,63],
+    aqiBreakdown: [20,30,25,18,12,10],
+    forecast: [
+      {day:'Mon',icon:'☀️',high:19,low:12},{day:'Tue',icon:'⛅',high:17,low:11},
+      {day:'Wed',icon:'🌧️',high:14,low:10},{day:'Thu',icon:'☀️',high:20,low:13},
+      {day:'Fri',icon:'☀️',high:22,low:14},{day:'Sat',icon:'⛅',high:18,low:12},
+      {day:'Sun',icon:'☀️',high:21,low:14}
+    ]
+  },
+  london: {
+    name: 'London', temp: 11, feelsLike: 8, condition: 'Overcast', icon: '☁️',
+    humidity: 82, pressure: 1005, wind: 24, windDir: 'SW', uv: 2, vis: 6, rain: 70,
+    aqi: 75, aqiLabel: 'Moderate',
+    hourlyTemp: [9,8,8,7,7,8,9,10,11,11,12,12,12,11,11,10,10,9,9,8,8,8,7,7],
+    hourlyPrecip: [20,25,30,35,30,20,15,10,5,10,20,35,45,50,40,30,20,15,20,25,30,25,20,15],
+    hourlyHumidity: [85,87,88,90,88,85,82,80,78,80,82,85,88,90,88,85,83,82,84,86,88,87,86,85],
+    aqiBreakdown: [28,40,35,25,20,15],
+    forecast: [
+      {day:'Mon',icon:'🌧️',high:11,low:6},{day:'Tue',icon:'🌧️',high:10,low:5},
+      {day:'Wed',icon:'☁️',high:9,low:4},{day:'Thu',icon:'⛅',high:12,low:7},
+      {day:'Fri',icon:'☀️',high:14,low:8},{day:'Sat',icon:'⛅',high:13,low:7},
+      {day:'Sun',icon:'🌧️',high:10,low:5}
+    ]
+  },
+  newyork: {
+    name: 'New York', temp: 22, feelsLike: 23, condition: 'Sunny', icon: '☀️',
+    humidity: 48, pressure: 1020, wind: 15, windDir: 'SE', uv: 7, vis: 14, rain: 5,
+    aqi: 52, aqiLabel: 'Good',
+    hourlyTemp: [18,17,16,16,17,18,19,20,21,22,23,24,24,24,23,22,21,20,19,19,18,18,17,17],
+    hourlyPrecip: [0,0,0,0,0,0,0,0,0,0,0,0,0,5,5,0,0,0,0,0,0,0,0,0],
+    hourlyHumidity: [55,58,60,62,60,56,52,48,45,43,42,40,41,44,47,50,52,55,58,60,58,56,55,56],
+    aqiBreakdown: [18,22,20,15,10,8],
+    forecast: [
+      {day:'Mon',icon:'☀️',high:24,low:17},{day:'Tue',icon:'☀️',high:25,low:18},
+      {day:'Wed',icon:'⛅',high:22,low:16},{day:'Thu',icon:'🌧️',high:18,low:14},
+      {day:'Fri',icon:'⛅',high:20,low:15},{day:'Sat',icon:'☀️',high:23,low:17},
+      {day:'Sun',icon:'☀️',high:26,low:19}
+    ]
+  },
+  sydney: {
+    name: 'Sydney', temp: 24, feelsLike: 25, condition: 'Breezy & Warm', icon: '🌤️',
+    humidity: 60, pressure: 1015, wind: 22, windDir: 'NE', uv: 8, vis: 10, rain: 20,
+    aqi: 40, aqiLabel: 'Good',
+    hourlyTemp: [21,20,20,19,19,20,21,22,23,24,25,26,26,25,25,24,23,22,22,21,21,20,20,20],
+    hourlyPrecip: [0,0,0,5,5,0,0,0,0,0,5,10,15,10,5,0,0,0,0,5,10,5,0,0],
+    hourlyHumidity: [65,68,70,72,70,66,62,60,57,55,54,56,58,60,62,63,62,60,62,65,67,68,66,65],
+    aqiBreakdown: [12,18,15,10,8,6],
+    forecast: [
+      {day:'Mon',icon:'🌤️',high:25,low:19},{day:'Tue',icon:'☀️',high:27,low:20},
+      {day:'Wed',icon:'☀️',high:28,low:21},{day:'Thu',icon:'⛅',high:24,low:18},
+      {day:'Fri',icon:'🌧️',high:21,low:16},{day:'Sat',icon:'⛅',high:23,low:17},
+      {day:'Sun',icon:'☀️',high:26,low:20}
+    ]
+  }
+};
+
+const hours = Array.from({length:24}, (_,i) => `${String(i).padStart(2,'0')}:00`);
+const aqiLabels = ['PM2.5','PM10','O₃','NO₂','SO₂','CO'];
+
+let tempChart, precipChart, aqiRadarChart, aqiDoughnutChart;
+let currentCity = 'mumbai';
+
+const chartDefaults = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: { legend: { labels: { color: '#94a3b8', font: { size: 11 } } } },
+  scales: {
+    x: { ticks: { color: '#475569', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
+    y: { ticks: { color: '#475569', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.04)' } }
+  }
+};
+
+function createGradient(ctx, c1, c2) {
+  const g = ctx.createLinearGradient(0, 0, 0, 260);
+  g.addColorStop(0, c1);
+  g.addColorStop(1, c2);
+  return g;
+}
+
+function initCharts(data) {
+  const tempCtx = document.getElementById('tempChart').getContext('2d');
+  const precipCtx = document.getElementById('precipChart').getContext('2d');
+  const radarCtx = document.getElementById('aqiRadar').getContext('2d');
+  const doughnutCtx = document.getElementById('aqiDoughnut').getContext('2d');
+
+  tempChart = new Chart(tempCtx, {
+    type: 'line',
+    data: {
+      labels: hours,
+      datasets: [{
+        label: 'Temperature °C',
+        data: data.hourlyTemp,
+        borderColor: '#38bdf8',
+        backgroundColor: createGradient(tempCtx, 'rgba(56,189,248,0.3)', 'rgba(56,189,248,0)'),
+        fill: true, tension: 0.4, pointRadius: 0, pointHoverRadius: 6,
+        pointHoverBackgroundColor: '#38bdf8', borderWidth: 2
+      }]
+    },
+    options: { ...chartDefaults, interaction: { intersect: false, mode: 'index' } }
+  });
+
+  precipChart = new Chart(precipCtx, {
+    type: 'bar',
+    data: {
+      labels: hours,
+      datasets: [
+        {
+          label: 'Precipitation %',
+          data: data.hourlyPrecip,
+          backgroundColor: 'rgba(167,139,250,0.6)',
+          borderRadius: 4, barPercentage: 0.6
+        },
+        {
+          label: 'Humidity %',
+          data: data.hourlyHumidity,
+          type: 'line', borderColor: '#34d399',
+          backgroundColor: 'transparent',
+          tension: 0.4, pointRadius: 0, borderWidth: 2, yAxisID: 'y1'
+        }
+      ]
+    },
+    options: {
+      ...chartDefaults,
+      scales: {
+        ...chartDefaults.scales,
+        y1: {
+          position: 'right',
+          ticks: { color: '#475569', font: { size: 10 } },
+          grid: { display: false },
+          min: 0, max: 100
+        }
+      }
+    }
+  });
+
+  aqiRadarChart = new Chart(radarCtx, {
+    type: 'radar',
+    data: {
+      labels: aqiLabels,
+      datasets: [{
+        label: 'AQI Components',
+        data: data.aqiBreakdown,
+        borderColor: '#f472b6',
+        backgroundColor: 'rgba(244,114,182,0.15)',
+        pointBackgroundColor: '#f472b6',
+        pointRadius: 4, borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: {
+        r: {
+          grid: { color: 'rgba(255,255,255,0.06)' },
+          angleLines: { color: 'rgba(255,255,255,0.06)' },
+          ticks: { display: false },
+          pointLabels: { color: '#94a3b8', font: { size: 11 } }
+        }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+
+  aqiDoughnutChart = new Chart(doughnutCtx, {
+    type: 'doughnut',
+    data: {
+      labels: ['AQI', 'Remaining'],
+      datasets: [{
+        data: [data.aqi, 500 - data.aqi],
+        backgroundColor: [aqiColor(data.aqi), 'rgba(255,255,255,0.04)'],
+        borderWidth: 0, cutout: '78%'
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { enabled: false } }
+    }
+  });
+}
+
+function aqiColor(val) {
+  if (val <= 50) return '#22c55e';
+  if (val <= 100) return '#eab308';
+  if (val <= 150) return '#f97316';
+  return '#ef4444';
+}
+
+function uvDescription(uv) {
+  if (uv <= 2) return 'Low';
+  if (uv <= 5) return 'Moderate';
+  if (uv <= 7) return 'High — Wear Sunscreen';
+  if (uv <= 10) return 'Very High — Limit Exposure';
+  return 'Extreme — Stay Indoors';
+}
+
+function updateDashboard(cityKey) {
+  const d = CITIES[cityKey];
+  currentCity = cityKey;
+
+  document.getElementById('heroTemp').textContent = d.temp + '°';
+  document.getElementById('heroCondition').textContent = d.condition;
+  document.getElementById('heroIcon').textContent = d.icon;
+  document.getElementById('feelsLike').textContent = d.feelsLike + '°';
+  document.getElementById('heroHumidity').textContent = d.humidity + '%';
+  document.getElementById('heroPressure').textContent = d.pressure;
+  document.getElementById('windSpeed').textContent = d.wind + ' km/h';
+  document.getElementById('windDir').textContent = d.windDir + ' — ' + (d.wind < 12 ? 'Light' : d.wind < 20 ? 'Gentle Breeze' : 'Fresh Wind');
+  document.getElementById('uvValue').textContent = d.uv;
+  document.getElementById('uvLabel').textContent = uvDescription(d.uv);
+  document.getElementById('visValue').textContent = d.vis + ' km';
+  document.getElementById('rainChance').textContent = d.rain + '%';
+  document.getElementById('rainSub').textContent = d.rain > 50 ? 'Heavy rain likely' : d.rain > 20 ? 'Light showers expected' : 'Unlikely today';
+  document.getElementById('aqiLabel').textContent = d.aqiLabel + ' — ' + d.aqi;
+
+  tempChart.data.datasets[0].data = d.hourlyTemp;
+  tempChart.update('none');
+
+  precipChart.data.datasets[0].data = d.hourlyPrecip;
+  precipChart.data.datasets[1].data = d.hourlyHumidity;
+  precipChart.update('none');
+
+  aqiRadarChart.data.datasets[0].data = d.aqiBreakdown;
+  aqiRadarChart.update('none');
+
+  aqiDoughnutChart.data.datasets[0].data = [d.aqi, 500 - d.aqi];
+  aqiDoughnutChart.data.datasets[0].backgroundColor = [aqiColor(d.aqi), 'rgba(255,255,255,0.04)'];
+  aqiDoughnutChart.update('none');
+
+  renderForecast(d.forecast);
+}
+
+function renderForecast(days) {
+  const row = document.getElementById('forecastRow');
+  row.innerHTML = days.map(d => `
+    <div class="forecast-day" onmouseenter="showTip(event, '${d.day}: ${d.high}°/${d.low}° ${d.icon}')" onmouseleave="hideTip()">
+      <div class="day-name">${d.day}</div>
+      <div class="day-icon">${d.icon}</div>
+      <div class="day-high">${d.high}°</div>
+      <div class="day-low">${d.low}°</div>
+    </div>
+  `).join('');
+}
+
+function showTip(e, text) {
+  const tip = document.getElementById('tooltip');
+  tip.textContent = text;
+  tip.style.opacity = '1';
+  tip.style.left = e.pageX - 40 + 'px';
+  tip.style.top = e.pageY - 48 + 'px';
+}
+function hideTip() {
+  document.getElementById('tooltip').style.opacity = '0';
+}
+
+function openPopup(type) {
+  const d = CITIES[currentCity];
+  const overlay = document.getElementById('popupOverlay');
+  const title = document.getElementById('popupTitle');
+  const body = document.getElementById('popupBody');
+
+  const popups = {
+    temperature: {
+      title: '🌡️ Temperature Details — ' + d.name,
+      html: `
+        <div class="popup-stats">
+          <div class="popup-stat"><div class="popup-stat-label">Current</div><div class="popup-stat-value">${d.temp}°C</div></div>
+          <div class="popup-stat"><div class="popup-stat-label">Feels Like</div><div class="popup-stat-value">${d.feelsLike}°C</div></div>
+          <div class="popup-stat"><div class="popup-stat-label">Day High</div><div class="popup-stat-value">${Math.max(...d.hourlyTemp)}°C</div></div>
+          <div class="popup-stat"><div class="popup-stat-label">Day Low</div><div class="popup-stat-value">${Math.min(...d.hourlyTemp)}°C</div></div>
+        </div>
+        <canvas id="popupChart" height="180"></canvas>
+      `,
+      chart: ctx => new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: hours.filter((_,i) => i%3===0),
+          datasets: [{
+            data: d.hourlyTemp.filter((_,i) => i%3===0),
+            borderColor: '#38bdf8', backgroundColor: 'rgba(56,189,248,0.1)',
+            fill: true, tension: 0.4, pointRadius: 4, pointBackgroundColor: '#38bdf8'
+          }]
+        },
+        options: { ...chartDefaults, plugins: { legend: { display: false } } }
+      })
+    },
+    wind: {
+      title: '💨 Wind Analysis — ' + d.name,
+      html: `
+        <div class="popup-stats">
+          <div class="popup-stat"><div class="popup-stat-label">Speed</div><div class="popup-stat-value">${d.wind} km/h</div></div>
+          <div class="popup-stat"><div class="popup-stat-label">Direction</div><div class="popup-stat-value">${d.windDir}</div></div>
+          <div class="popup-stat"><div class="popup-stat-label">Gusts Up To</div><div class="popup-stat-value">${d.wind + 8} km/h</div></div>
+          <div class="popup-stat"><div class="popup-stat-label">Beaufort Scale</div><div class="popup-stat-value">${d.wind < 12 ? '2 — Light' : d.wind < 20 ? '3 — Gentle' : '4 — Moderate'}</div></div>
+        </div>
+        <p style="color:var(--text-dim);font-size:13px;margin-top:8px">
+          ${d.wind > 20 ? '⚠️ Moderate winds may affect outdoor activities. Secure loose objects.' : 'Conditions are calm and comfortable for outdoor activities.'}
+        </p>
+      `
+    },
+    uv: {
+      title: '☀️ UV Index — ' + d.name,
+      html: `
+        <div class="popup-stats">
+          <div class="popup-stat"><div class="popup-stat-label">Current UV</div><div class="popup-stat-value" style="color:${d.uv > 7 ? '#ef4444' : d.uv > 5 ? '#f97316' : '#eab308'}">${d.uv}</div></div>
+          <div class="popup-stat"><div class="popup-stat-label">Category</div><div class="popup-stat-value" style="font-size:16px">${uvDescription(d.uv).split('—')[0].trim()}</div></div>
+          <div class="popup-stat"><div class="popup-stat-label">Peak Hour</div><div class="popup-stat-value">12:00–14:00</div></div>
+          <div class="popup-stat"><div class="popup-stat-label">Protection</div><div class="popup-stat-value" style="font-size:14px">${d.uv > 5 ? 'SPF 30+' : 'SPF 15'}</div></div>
+        </div>
+        <div style="margin-top:12px;padding:14px;background:rgba(244,114,182,0.08);border-radius:10px;border:1px solid rgba(244,114,182,0.2);font-size:13px;color:var(--text-dim)">
+          ${d.uv >= 6 ? '🧴 <strong style="color:var(--text)">Recommendation:</strong> Apply broad-spectrum sunscreen. Wear sunglasses and a hat between 11am–3pm.' :
+            '✅ <strong style="color:var(--text)">Low Risk:</strong> Normal outdoor activity is safe. Sunscreen still recommended for extended exposure.'}
+        </div>
+      `
+    },
+    visibility: {
+      title: '👁️ Visibility — ' + d.name,
+      html: `
+        <div class="popup-stats">
+          <div class="popup-stat"><div class="popup-stat-label">Distance</div><div class="popup-stat-value">${d.vis} km</div></div>
+          <div class="popup-stat"><div class="popup-stat-label">Rating</div><div class="popup-stat-value">${d.vis > 10 ? 'Excellent' : d.vis > 5 ? 'Good' : 'Poor'}</div></div>
+        </div>
+        <p style="color:var(--text-dim);font-size:13px;margin-top:8px">
+          ${d.vis < 5 ? '⚠️ Reduced visibility. Drive with caution and use headlights.' : 'Clear conditions with good horizontal visibility.'}
+        </p>
+      `
+    },
+    rain: {
+      title: '🌧️ Precipitation — ' + d.name,
+      html: `
+        <div class="popup-stats">
+          <div class="popup-stat"><div class="popup-stat-label">Chance</div><div class="popup-stat-value">${d.rain}%</div></div>
+          <div class="popup-stat"><div class="popup-stat-label">Type</div><div class="popup-stat-value">${d.rain > 50 ? 'Rain' : 'Drizzle'}</div></div>
+          <div class="popup-stat"><div class="popup-stat-label">Peak Hour</div><div class="popup-stat-value">${hours[d.hourlyPrecip.indexOf(Math.max(...d.hourlyPrecip))]}</div></div>
+          <div class="popup-stat"><div class="popup-stat-label">Accumulation</div><div class="popup-stat-value">${(d.hourlyPrecip.reduce((a,b)=>a+b,0)/100*2.5).toFixed(1)} mm</div></div>
+        </div>
+        <canvas id="popupChart" height="180"></canvas>
+      `,
+      chart: ctx => new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: hours.filter((_,i) => i%2===0),
+          datasets: [{
+            data: d.hourlyPrecip.filter((_,i) => i%2===0),
+            backgroundColor: 'rgba(167,139,250,0.5)', borderRadius: 4
+          }]
+        },
+        options: { ...chartDefaults, plugins: { legend: { display: false } } }
+      })
+    },
+    aqi: {
+      title: '🫁 Air Quality — ' + d.name,
+      html: `
+        <div class="popup-stats">
+          <div class="popup-stat"><div class="popup-stat-label">AQI</div><div class="popup-stat-value" style="color:${aqiColor(d.aqi)}">${d.aqi}</div></div>
+          <div class="popup-stat"><div class="popup-stat-label">Category</div><div class="popup-stat-value" style="font-size:16px">${d.aqiLabel}</div></div>
+          ${aqiLabels.map((l,i) => `<div class="popup-stat"><div class="popup-stat-label">${l}</div><div class="popup-stat-value">${d.aqiBreakdown[i]}</div></div>`).join('')}
+        </div>
+        <div style="margin-top:12px;padding:14px;background:rgba(52,211,153,0.08);border-radius:10px;border:1px solid rgba(52,211,153,0.2);font-size:13px;color:var(--text-dim)">
+          ${d.aqi > 100 ? '😷 <strong style="color:var(--text)">Advisory:</strong> Sensitive groups should reduce prolonged outdoor exertion.' :
+            '✅ <strong style="color:var(--text)">All Clear:</strong> Air quality is acceptable for all activities.'}
+        </div>
+      `
+    }
+  };
+
+  const p = popups[type];
+  title.textContent = p.title;
+  body.innerHTML = p.html;
+  overlay.classList.add('active');
+
+  if (p.chart) {
+    requestAnimationFrame(() => {
+      const canvas = document.getElementById('popupChart');
+      if (canvas) p.chart(canvas.getContext('2d'));
+    });
+  }
+}
+
+function closePopup(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById('popupOverlay').classList.remove('active');
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  document.getElementById('toastText').innerHTML = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 4500);
+}
+
+function createParticles() {
+  const container = document.getElementById('particles');
+  for (let i = 0; i < 30; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 3 + 1;
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (Math.random() * 15 + 10) + 's';
+    p.style.animationDelay = (Math.random() * 10) + 's';
+    container.appendChild(p);
+  }
+}
+
+document.getElementById('citySelect').addEventListener('change', function() {
+  updateDashboard(this.value);
+  showToast(`<strong>📍 Switched to ${CITIES[this.value].name}</strong>Data refreshed with latest readings`);
+});
+
+createParticles();
+initCharts(CITIES.mumbai);
+renderForecast(CITIES.mumbai.forecast);
+
+const alerts = [
+  '<strong>⚡ Weather Alert</strong>UV index rising — stay hydrated!',
+  '<strong>🌡️ Heat Advisory</strong>Temperature spike expected at noon',
+  '<strong>🌧️ Rain Incoming</strong>Carry an umbrella this evening',
+  '<strong>💨 Wind Advisory</strong>Gusts up to 35 km/h after 4pm'
+];
+let alertIdx = 0;
+setTimeout(() => {
+  showToast(alerts[0]);
+  setInterval(() => {
+    alertIdx = (alertIdx + 1) % alerts.length;
+    showToast(alerts[alertIdx]);
+  }, 20000);
+}, 3000);
+
+setInterval(() => {
+  const d = CITIES[currentCity];
+  const jitter = () => (Math.random() - 0.5) * 2;
+  d.hourlyTemp = d.hourlyTemp.map(t => +(t + jitter() * 0.3).toFixed(1));
+  d.hourlyPrecip = d.hourlyPrecip.map(p => Math.max(0, Math.min(100, +(p + jitter() * 2).toFixed(0))));
+  d.hourlyHumidity = d.hourlyHumidity.map(h => Math.max(30, Math.min(100, +(h + jitter()).toFixed(0))));
+
+  tempChart.data.datasets[0].data = d.hourlyTemp;
+  tempChart.update('none');
+  precipChart.data.datasets[0].data = d.hourlyPrecip;
+  precipChart.data.datasets[1].data = d.hourlyHumidity;
+  precipChart.update('none');
+}, 5000);
+</script>
+</body>
+</html>

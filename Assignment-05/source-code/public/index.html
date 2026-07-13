@@ -1,64 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CarBazaar — Premium Used Cars</title>
-<link rel="stylesheet" href="/css/style.css">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Racing+Sans+One&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkyWay Travels</title>
+  <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body>
-<nav class="navbar">
-  <a href="/" class="logo">🏎️ <span>Car</span>Bazaar</a>
-  <div class="nav-links">
-    <a href="/">Browse</a>
-    <a href="/new.html">Sell Your Car</a>
-    <a href="/bookings.html">Bookings</a>
-    <a href="/cart.html" class="cart-link">🛒 Cart <span class="badge" id="cartCount">0</span></a>
-  </div>
-</nav>
+  <nav>
+    <div class="logo">SkyWay Travels</div>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="#destinations">Destinations</a></li>
+      <li><a href="/bookings">My Bookings</a></li>
+    </ul>
+  </nav>
 
-<section class="hero">
-  <div class="hero-content">
-    <h1 class="hero-title">Find Your <span class="gradient">Dream Ride</span></h1>
-    <p class="hero-sub">India's premium marketplace for certified pre-owned cars 🚀</p>
-    <form id="searchForm" class="search-bar">
-      <input type="text" id="searchInput" placeholder="Search by brand or model...">
-      <button type="submit">🔍 Search</button>
-    </form>
-  </div>
-  <div class="hero-blob"></div>
-</section>
+  <section class="hero">
+    <div class="stars" id="stars"></div>
+    <h1>Explore the <span>World</span> With Us</h1>
+    <p>Book flights, buses, and trains to amazing destinations. Watch your journey come alive!</p>
+    <a href="#destinations" class="hero-btn">View Destinations</a>
 
-<section class="section">
-  <h2 class="section-title">⭐ Featured Deals</h2>
-  <div class="grid" id="featuredGrid"></div>
-</section>
-
-<section class="section">
-  <div class="section-head">
-    <h2 class="section-title">🚗 All Cars (<span id="carCount">0</span>)</h2>
-    <div class="filters">
-      <select id="filterBrand"><option value="">All Brands</option></select>
-      <select id="filterFuel">
-        <option value="">All Fuels</option>
-        <option>Petrol</option><option>Diesel</option><option>Electric</option><option>Hybrid</option><option>CNG</option>
-      </select>
-      <select id="filterSort">
-        <option value="">Sort: Latest</option>
-        <option value="low">Price: Low → High</option>
-        <option value="high">Price: High → Low</option>
-        <option value="new">Year: Newest</option>
-      </select>
+    <div class="scene">
+      <div class="cloud cloud-1"></div>
+      <div class="cloud cloud-2"></div>
+      <div class="cloud cloud-3"></div>
+      <div class="airplane">&#9992;</div>
     </div>
-  </div>
-  <div class="grid" id="carGrid"></div>
-  <div class="empty" id="emptyState" style="display:none">😔 No cars found. <a href="/new.html">Be the first to list one!</a></div>
-</section>
+  </section>
 
-<footer><p>© 2026 CarBazaar — Drive your dream. Built with Node.js + Express + MongoDB.</p></footer>
+  <h2 class="section-title" id="destinations">Popular <span>Destinations</span></h2>
+  <div class="destinations-grid" id="destGrid"></div>
 
-<script src="/js/app.js"></script>
-<script src="/js/home.js"></script>
+  <footer>&copy; 2026 SkyWay Travels | Node.js + Express + NoSQL</footer>
+
+  <script>
+    // Generate stars
+    const starsEl = document.getElementById("stars");
+    for (let i = 0; i < 40; i++) {
+      const s = document.createElement("div");
+      s.className = "star";
+      s.style.left = Math.random() * 100 + "%";
+      s.style.top = Math.random() * 100 + "%";
+      s.style.animationDelay = Math.random() * 3 + "s";
+      starsEl.appendChild(s);
+    }
+
+    // Fetch destinations from API and render cards
+    fetch("/api/destinations")
+      .then((r) => r.json())
+      .then((destinations) => {
+        const grid = document.getElementById("destGrid");
+        destinations.forEach((d) => {
+          const modeIcons = { flight: "&#9992; Flight", bus: "&#128652; Bus", train: "&#128646; Train" };
+          const badges = d.modes.map((m) => `<span class="mode-badge">${modeIcons[m]}</span>`).join("");
+          grid.innerHTML += `
+            <a href="/destination?id=${d.id}" class="dest-card">
+              <img src="${d.image}" alt="${d.name}" loading="lazy" />
+              <div class="card-body">
+                <h3>${d.name}</h3>
+                <p class="country">${d.country}</p>
+                <p class="price">$${d.price} <small>/person</small></p>
+                <div class="modes-badges">${badges}</div>
+              </div>
+            </a>`;
+        });
+      });
+  </script>
 </body>
 </html>

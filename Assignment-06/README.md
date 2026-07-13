@@ -1,29 +1,25 @@
-# Assignment 06 — Student Feedback Review System (MERN)
+# Assignment 05 — CarBazaar (Used Car E-commerce Portal)
 
 ## Description
-A MERN-stack application where students submit course feedback and admins review aggregated ratings. Includes JWT-based authentication and role-based access (student/admin).
+A full-stack used-car marketplace where users can browse, search, filter and sort listings, book test drives, manage a session-based shopping cart, and perform full CRUD on car listings.
 
 ## Technologies Used
-- MongoDB + Mongoose
+- Node.js
 - Express.js
-- React 18 + Vite + React Router
-- JWT authentication
+- MongoDB + Mongoose
+- EJS templating
+- express-session, dotenv
 
 ## Folder Contents
-- `source-code/server/` — Express API (port 5000)
-- `source-code/client/` — React frontend (port 5173)
+- `source-code/` — server.js, seed.js, routes/, models/, views/ (EJS), public/ (CSS/JS)
 - `output-screenshots/` — add screenshots of the running app here
+- `Assignment-Brief.pdf` — original assignment problem statement
 
 ## How to Run
 ```bash
-# MongoDB must be running locally (mongodb://localhost:27017)
-
-cd source-code/server
-cp .env.example .env   # set JWT_SECRET
+cd source-code
 npm install
-npm run dev             # http://localhost:5000
-
-cd ../client
-npm install
-npm run dev              # http://localhost:5173
+# ensure MongoDB is running locally (mongodb://127.0.0.1:27017)
+npm run seed     # optional: seed sample cars
+npm start
 ```

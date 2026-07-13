@@ -1,16 +1,17 @@
-# Assignment 03 — StormPulse (Live Weather Dashboard)
+# Assignment 02 — Court Vigilante (Basketball Shoe Landing Page)
 
 ## Description
-A single-page live weather dashboard with animated particle effects and interactive charts for visualizing weather data trends.
+A responsive marketing/landing page for a fictional basketball sneaker brand ("Court Vigilante"), featuring a preloader, animated particle background, and a Bootstrap-based navbar.
 
 ## Technologies Used
 - HTML5
-- CSS3 (embedded)
+- Bootstrap 5
+- CSS3
 - JavaScript
-- Chart.js
+- Font Awesome icons, Google Fonts
 
 ## Folder Contents
-- `source-code/` — index.html
+- `source-code/` — index.html, style.css, app.js, images/
 - `output-screenshots/` — add screenshots of the running page here
 - `Assignment-Brief.pdf` — original assignment problem statement
 
