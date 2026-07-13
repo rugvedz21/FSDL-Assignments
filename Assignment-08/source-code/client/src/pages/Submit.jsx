@@ -58,7 +58,7 @@ export default function Submit() {
           <textarea rows="4" value={form.comment} onChange={(e) => setForm({ ...form, comment: e.target.value })} />
         </label>
         {err && <div className="error">{err}</div>}
-        {msg && <div style={{ color: 'green', marginTop: 8 }}>{msg}</div>}
+        {msg && <div className="success-msg">{msg}</div>}
         <div style={{ marginTop: 16 }}><button type="submit">Submit</button></div>
       </form>
     </div>
