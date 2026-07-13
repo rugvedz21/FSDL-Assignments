@@ -14,8 +14,7 @@ Subject: Full Stack Development Lab (FSDL)
 - [Assignment 04 — StormPulse (Live Weather Dashboard)](./Assignment-04)
 - [Assignment 05 — Travel Destination Booking App](./Assignment-05)
 - [Assignment 06 — CarBazaar (Used Car E-commerce Portal)](./Assignment-06)
-- [Assignment 07 — (implementation pending)](./Assignment-07)
-- [Assignment 08 — Student Feedback Review System (MERN)](./Assignment-08)
+- [Assignment 07 — Student Feedback Review System (MERN)](./Assignment-07)
 
 ## Technologies Used
 
@@ -31,7 +30,7 @@ Subject: Full Stack Development Lab (FSDL)
 
 Each assignment folder contains:
 - `source-code/` — the assignment's source files
-- `output-screenshots/` — screenshots of the assignment running (to be added)
+- `output-screenshots/` — screenshots of the assignment running
 - `README.md` — description, tech stack, and run instructions
 
 ## Hosted Profile Website
