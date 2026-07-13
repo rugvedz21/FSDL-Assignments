@@ -8,12 +8,14 @@ Subject: Full Stack Development Lab (FSDL)
 
 ## Assignments Included
 
-- [Assignment 01 — Vibeflow (Music Player UI)](./Assignment-01)
-- [Assignment 02 — Court Vigilante (Basketball Shoe Landing Page)](./Assignment-02)
-- [Assignment 03 — StormPulse (Live Weather Dashboard)](./Assignment-03)
-- [Assignment 04 — Travel Destination Booking App](./Assignment-04)
-- [Assignment 05 — CarBazaar (Used Car E-commerce Portal)](./Assignment-05)
-- [Assignment 06 — Student Feedback Review System (MERN)](./Assignment-06)
+- [Assignment 01 — HTML Text Formatting Tags](./Assignment-01)
+- [Assignment 02 — Vibeflow (Music Player UI)](./Assignment-02)
+- [Assignment 03 — Court Vigilante (Basketball Shoe Landing Page)](./Assignment-03)
+- [Assignment 04 — StormPulse (Live Weather Dashboard)](./Assignment-04)
+- [Assignment 05 — Travel Destination Booking App](./Assignment-05)
+- [Assignment 06 — CarBazaar (Used Car E-commerce Portal)](./Assignment-06)
+- [Assignment 07 — (implementation pending)](./Assignment-07)
+- [Assignment 08 — Student Feedback Review System (MERN)](./Assignment-08)
 
 ## Technologies Used
 
