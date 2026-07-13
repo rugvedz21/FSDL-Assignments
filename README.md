@@ -36,7 +36,7 @@ Each assignment folder contains:
 
 ## Hosted Profile Website
 
-Live Link: _to be added (Task 2)_
+Live Link: https://rugvedz21.github.io/
 
 ## Repository Link
 
